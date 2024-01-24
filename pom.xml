@@ -36,6 +36,7 @@
         <module>srvc-search</module>
         <module>srvc-user-timeline</module>
         <module>srvc-home-timeline</module>
+        <module>tinyx-gateway</module>
     </modules>
 
     <dependencyManagement>
