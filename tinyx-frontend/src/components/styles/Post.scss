@@ -1,0 +1,111 @@
+.post {
+    padding: 1rem 1.5rem;
+    display: flex;
+    border-bottom: 1px solid #4c4c4c;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    > a > img {
+        width: 2.7rem;
+        height: 2.7rem;
+        border-radius: 50%;
+        margin-right: .5rem;
+    }
+
+    .content {
+        width: 100%;
+        > img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: .5rem;
+            border: 1px solid #4c4c4c;
+            margin-top: .4rem;
+        }
+
+        p {
+            color: #fff;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin: 0;
+
+            &.post_info {
+                color: #888888;
+                font-size: .95rem;
+                margin-top: .2rem;
+            }
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+
+            >div {
+                color: #888888;
+                font-size: .9rem;
+                display: flex;
+                align-items: center;
+                gap: .2rem;
+
+                svg {
+                    fill: #888888;
+                    height: 1.2rem;
+                    width: 1.2rem;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    &:nth-child(1) {
+                        color: #4a99e9;
+                        svg {
+                            fill: #4a99e9;
+                        }
+                    }
+
+                    &:nth-child(2) {
+                        color: #3ce756;
+                        svg {
+                            fill: #3ce756;
+                        }
+                    }
+
+                    &:nth-child(3) {
+                        color: #f10f75;
+                        svg {
+                            fill: #f10f75;
+                        }
+                    }
+                }
+
+                &:last-of-type {
+                    gap: .5rem;
+                    cursor: unset;
+
+                    &:hover {
+                        svg {
+                            fill: #888888;
+                        }
+                    }
+
+                    svg {
+                        cursor: pointer;
+                        &:hover {
+                            fill: #fff;
+                        }
+                    }
+                }
+            }
+        }
+
+        .post {
+            border: 1px solid #4c4c4c;
+            border-radius: 10px;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+            .actions {
+                display: none;
+            }
+        }
+    }
+}

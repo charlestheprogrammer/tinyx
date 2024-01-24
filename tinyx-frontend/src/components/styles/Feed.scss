@@ -1,0 +1,54 @@
+.feed {
+    flex: 6;
+    border-left: 1px solid #4c4c4c;
+    border-right: 1px solid #4c4c4c;
+
+    .feed__tabs {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 1px solid #4c4c4c;
+        position: sticky;
+        top: 0;
+        background-color: rgba($color: #000000, $alpha: 0.6);
+        backdrop-filter: blur(10px);
+
+        .feed__tab {
+            padding-top: 1rem;
+            padding-bottom: .8rem;
+            color: #6e6e6e;
+            font-weight: 700;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            transition: background-color .2s ease-in-out;
+            position: relative;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #1f1f1f;
+            }
+
+            &.--selected {
+                color: #fff;
+
+                &::after {
+                    background-color: #4a99e9;
+                }
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 4px;
+                background-color: transparent;
+                border-radius: 2px;
+                transition: background-color .1s ease-in-out;
+            }
+        }
+    }
+}

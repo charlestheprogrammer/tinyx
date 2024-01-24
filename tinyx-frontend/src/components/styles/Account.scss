@@ -1,0 +1,38 @@
+.account {
+    flex: 1;
+    height: calc(100vh - 1rem);
+    position: sticky;
+    top: 0;
+    left: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-right: 1.5rem;
+    padding-bottom: 1rem;
+
+    .navbar {
+        padding-top: 1rem;
+
+        svg {
+            width: 1.9rem;
+            height: 1.9rem;
+            fill: #fff;
+            transition: fill .2s ease-in-out;
+
+            &:hover {
+                cursor: pointer;
+                fill: #4a99e9;
+            }
+        }
+    }
+
+    .info {
+        img {
+            width: 2.3rem;
+            height: 2.3rem;
+            border-radius: 50%;
+        }
+    }
+}

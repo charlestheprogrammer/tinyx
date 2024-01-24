@@ -1,0 +1,68 @@
+.writePost {
+    padding: 1rem 1.5rem;
+    padding-bottom: .4rem;
+    display: flex;
+    gap: .5rem;
+    border-bottom: 1px solid #4c4c4c;
+
+    > img {
+        width: 2.7rem;
+        height: 2.7rem;
+        border-radius: 50%;
+        margin-right: .5rem;
+    }
+
+    .content {
+        flex: 1;
+        padding-top: .4rem;
+        textarea {
+            background-color: transparent;
+            width: 100%;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-weight: 500;
+            resize: none;
+            margin-bottom: .5rem;
+            font-size: 1.3rem;
+        }
+
+        .actions {
+            border-top: 1px solid #4c4c4c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .7rem 0;
+
+            .icons {
+                display: flex;
+                gap: .5rem;
+
+                svg {
+                    fill: #4a99e9;
+                    height: 1.4rem;
+                    width: 1.4rem;
+                    transition: fill .2s ease-in-out;
+                    cursor: pointer;
+                }
+            }
+
+            button {
+                background-color: #4a99e9;
+                border: none;
+                outline: none;
+                color: #fff;
+                padding: .4rem 1rem;
+                border-radius: 30px;
+                font-weight: 700;
+                font-size: 1.05rem;
+                transition: background-color .2s ease-in-out;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: #4a99e9;
+                }
+            }
+        }
+    }
+}
