@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://checkstyle.sourceforge.net/dtds/configuration_1_3.dtd">
+
+<!-- TinyX Checks -->
+
+<module name="Checker">
+  <!-- Simple Code Conventions -->
+  <module name="LineLength">
+    <property name="fileExtensions" value="java"/>
+    <property name="max" value="100"/>
+    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+  </module>
+
+  <module name="TreeWalker">
+    <module name="AvoidStarImport"/>
+    <module name="EmptyCatchBlock"/>
+    <module name="IllegalInstantiation"/>
+    <module name="UnusedImports"/>
+    <module name="RedundantImport"/>
+    <module name="OperatorWrap"/>
+    <module name="SeparatorWrap"/>
+    <module name="MethodParamPad"/>
+    <module name="WhitespaceAround"/>
+    <module name="GenericWhitespace"/>
+    <module name="ParenPad"/>
+    <module name="NoWhitespaceBeforeCaseDefaultColon"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="VariableDeclarationUsageDistance"/>
+    <module name="FallThrough"/>
+    <module name="CommentsIndentation"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="ModifierOrder"/>
+    <module name="PackageName"/>
+    <module name="MemberName"/>
+    <module name="ParameterName"/>
+    <module name="CatchParameterName"/>
+    <module name="LambdaParameterName"/>
+    <module name="RecordComponentName"/>
+    <module name="LocalVariableName"/>
+    <module name="PatternVariableName"/>
+    <module name="MethodTypeParameterName"/>
+    <module name="ClassTypeParameterName"/>
+    <module name="InterfaceTypeParameterName"/>
+    <module name="RecordTypeParameterName"/>
+    <module name="NoFinalizer"/>
+    <module name="Indentation">
+      <property name="basicOffset" value="4"/>
+      <property name="tabWidth" value="4"/>
+    </module>
+    <!-- Javadoc -->
+    <module name="JavadocMethod"/>
+    <module name="MissingJavadocMethod">
+        <property name="scope" value="protected"/>
+        <!-- Don't require documentation for REST endpoints -->
+        <property name="allowedAnnotations" value="Path,GET,POST,PUT,DELETE,Override"/>
+        <property name="minLineCount" value="3"/>
+    </module>
+  </module>
+</module>
