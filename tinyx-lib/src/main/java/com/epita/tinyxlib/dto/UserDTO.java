@@ -1,4 +1,4 @@
-package com.epita.dto;
+package com.epita.tinyxlib.dto;
 
 import lombok.Data;
 

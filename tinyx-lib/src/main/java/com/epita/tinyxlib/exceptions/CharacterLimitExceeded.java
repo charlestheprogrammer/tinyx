@@ -1,4 +1,4 @@
-package com.epita.exceptions;
+package com.epita.tinyxlib.exceptions;
 
 import lombok.experimental.StandardException;
 

@@ -7,11 +7,14 @@
     <artifactId>tinyx-services</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>com.epita</groupId>
-  <artifactId>tinyx-lib</artifactId>
+  <artifactId>tinyxlib</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>tinyx-lib</name>
   <url>http://maven.apache.org</url>
+  <packaging>jar</packaging>
+  <description>
+    Support library for tinyx microservices
+  </description>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

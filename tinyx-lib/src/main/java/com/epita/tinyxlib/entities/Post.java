@@ -1,4 +1,4 @@
-package com.epita.entities;
+package com.epita.tinyxlib.entities;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
