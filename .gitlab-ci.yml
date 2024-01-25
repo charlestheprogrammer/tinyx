@@ -41,6 +41,9 @@ build_frontend:
     expire_in: 10 minutes
 
 deploy_frontend_to_s3:
+  environment:
+    name: prod_frontend
+    url: http://tinyx.tech
   stage: deploy 🚀
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
