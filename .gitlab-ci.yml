@@ -1,0 +1,52 @@
+stages:
+  - lint 💄
+  - test 🧪
+  - build 🏗
+  - deploy 🚀
+
+lint_frontend:
+  stage: lint 💄
+  image: node:20.0.0-alpine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH != 'main'
+  script:
+    - npx prettier -c ./tinyx-frontend/src/**
+
+test:
+  stage: test 🧪
+  image: node:20.0.0-alpine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH != 'main'
+  script:
+    - echo "Running tests..."
+
+build_frontend:
+  stage: build 🏗
+  image: node:20.0.0-alpine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+    - cd tinyx-frontend
+    - npm install
+    - npm run build
+  only:
+    changes:
+      - tinyx-frontend/**/*
+  artifacts:
+    paths:
+      - tinyx-frontend/dist
+    expire_in: 10 minutes
+
+deploy_frontend_to_s3:
+  stage: deploy 🚀
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+    - aws s3 sync tinyx-frontend/dist/ s3://tinyx.tech --delete
+  only:
+    changes:
+      - tinyx-frontend/**/*

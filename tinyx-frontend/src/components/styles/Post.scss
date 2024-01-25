@@ -11,7 +11,7 @@
         width: 2.7rem;
         height: 2.7rem;
         border-radius: 50%;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
     }
 
     .content {
@@ -19,9 +19,9 @@
         > img {
             width: 100%;
             border-radius: 10px;
-            margin-bottom: .5rem;
+            margin-bottom: 0.5rem;
             border: 1px solid #4c4c4c;
-            margin-top: .4rem;
+            margin-top: 0.4rem;
         }
 
         p {
@@ -32,8 +32,8 @@
 
             &.post_info {
                 color: #888888;
-                font-size: .95rem;
-                margin-top: .2rem;
+                font-size: 0.95rem;
+                margin-top: 0.2rem;
             }
         }
 
@@ -41,12 +41,12 @@
             display: flex;
             justify-content: space-between;
 
-            >div {
+            > div {
                 color: #888888;
-                font-size: .9rem;
+                font-size: 0.9rem;
                 display: flex;
                 align-items: center;
-                gap: .2rem;
+                gap: 0.2rem;
 
                 svg {
                     fill: #888888;
@@ -79,7 +79,7 @@
                 }
 
                 &:last-of-type {
-                    gap: .5rem;
+                    gap: 0.5rem;
                     cursor: unset;
 
                     &:hover {
@@ -101,8 +101,8 @@
         .post {
             border: 1px solid #4c4c4c;
             border-radius: 10px;
-            margin-top: .5rem;
-            margin-bottom: .5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
             .actions {
                 display: none;
             }

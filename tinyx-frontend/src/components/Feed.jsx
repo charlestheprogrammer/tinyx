@@ -11,17 +11,13 @@ export default function Feed() {
         <div className="feed">
             <div className="feed__tabs">
                 <div
-                    className={`feed__tab ${
-                        selectedTab === 0 ? "--selected" : ""
-                    }`}
+                    className={`feed__tab ${selectedTab === 0 ? "--selected" : ""}`}
                     onClick={() => setSelectedTab(0)}
                 >
                     For you
                 </div>
                 <div
-                    className={`feed__tab ${
-                        selectedTab === 1 ? "--selected" : ""
-                    }`}
+                    className={`feed__tab ${selectedTab === 1 ? "--selected" : ""}`}
                     onClick={() => setSelectedTab(1)}
                 >
                     Following

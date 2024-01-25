@@ -25,8 +25,8 @@ export default function User() {
                 <img src="https://picsum.photos/200" alt="" />
             </div>
             <div className="actions">
-              <button>Block</button>
-              <button>Follow</button>
+                <button>Block</button>
+                <button>Follow</button>
             </div>
         </div>
     );
