@@ -43,10 +43,10 @@ build_frontend:
 deploy_frontend_to_s3:
   stage: deploy 🚀
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - aws s3 sync tinyx-frontend/dist/ s3://tinyx.tech --delete
   only:
     changes:
       - tinyx-frontend/**/*
+    variables:
+      - $CI_COMMIT_BRANCH == 'main'
