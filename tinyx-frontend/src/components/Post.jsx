@@ -4,20 +4,56 @@ import { Link } from "react-router-dom";
 
 import profilePicture from "../assets/pp.jpeg";
 import "./styles/Post.scss";
+import axios from "axios";
+
+const dateOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+};
 
 export default function Post({ user, content, image, date, post }) {
+    const [userInfos, setUserInfos] = React.useState({});
+    const [repostInfos, setRepostInfos] = React.useState({});
+    React.useEffect(() => {
+        axios
+            .get(`http://localhost:9000/api/user/by_user_id/${user}`)
+            .then((res) => {
+                setUserInfos(res.data);
+            });
+    }, [user]);
+
+    React.useEffect(() => {
+        if (!post) return;
+        axios
+            .get(`http://localhost:9000/repo-post/api/post/by_id/${post}`)
+            .then((res) => {
+                setRepostInfos(res.data);
+            });
+    }, []);
+
     return (
         <div className="post">
-            <Link to={`/users/${user}`}>
-                <img src={profilePicture} alt="" />
+            <Link to={`/users/${userInfos.username}`}>
+                <img src={userInfos.imageUri ?? profilePicture} alt="" />
             </Link>
             <div className="content">
                 <p className="post_info">
-                    @{user} • {date}
+                    <Link to={`/users/${userInfos.username}`}>
+                        @{userInfos.username}
+                    </Link>{" "}
+                    • {new Date(date).toLocaleDateString("en-US", dateOptions)}
                 </p>
-                <p>{content}</p>
+                <p style={{ whiteSpace: "pre-wrap" }}>{content}</p>
                 {image && <img src={image} alt="" />}
-                {post}
+                {post && (
+                    <Post
+                        user={repostInfos.author}
+                        content={repostInfos.text}
+                        image={repostInfos.media}
+                        date={repostInfos.created_date}
+                    />
+                )}
                 <div className="actions">
                     <div>
                         <svg

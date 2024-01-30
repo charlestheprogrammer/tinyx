@@ -3,9 +3,17 @@ import WritePost from "./WritePost";
 
 import "./styles/Feed.scss";
 import Post from "./Post";
+import axios from "axios";
 
 export default function Feed() {
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [posts, setPosts] = React.useState([]);
+
+    React.useEffect(() => {
+        axios.get("http://localhost:9000/repo-post/api/posts").then((res) => {
+            setPosts(res.data);
+        });
+    }, []);
 
     return (
         <div className="feed">
@@ -24,43 +32,16 @@ export default function Feed() {
                 </div>
             </div>
             <WritePost />
-            <Post
-                content="Salut les gars"
-                date="Jan 23"
-                user="username"
-                image="https://source.unsplash.com/random"
-            />
-            <Post
-                content="One of the two remaining northern white rhinos in the world, guarded 24 hours a day"
-                date="Jan 23"
-                user="username"
-                image="https://pbs.twimg.com/media/GEgEsj_WcAA3npm?format=jpg&name=small"
-            />
-            <Post
-                content="Bro thinks he's Maradona"
-                date="18h"
-                user="username"
-                image="https://pbs.twimg.com/media/GEjIwX7WwAAp0TY?format=jpg&name=medium"
-            />
-            <Post
-                content="Salut les gars"
-                date="Jan 23"
-                user="username"
-                post={
-                    <Post
-                        content="Bro thinks he's Maradona"
-                        date="18h"
-                        user="username"
-                        image="https://pbs.twimg.com/media/GEjIwX7WwAAp0TY?format=jpg&name=medium"
-                    />
-                }
-            />
-            <Post
-                content="Salut les gars"
-                date="Jan 23"
-                user="username"
-                image="https://source.unsplash.com/random"
-            />
+            {posts.map((post) => (
+                <Post
+                    key={post.id}
+                    user={post.author}
+                    content={post.text}
+                    image={post.media}
+                    date={post.created_date}
+                    post={post.repost}
+                />
+            ))}
         </div>
     );
 }

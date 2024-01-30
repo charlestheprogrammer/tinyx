@@ -51,6 +51,7 @@
         height: 9rem;
         border-radius: 50%;
         border: 6px solid #000;
+        background-color: #000000;
 
         img {
             width: 100%;
@@ -60,12 +61,13 @@
         }
     }
 
-    .actions {
+    > .actions {
         display: flex;
         justify-content: flex-end;
         gap: 1rem;
         padding-right: 1rem;
         padding-top: 0.5rem;
+        margin-bottom: 4rem;
 
         button {
             padding: 0.5rem 1rem;

@@ -2,6 +2,7 @@
     padding: 1rem 1.5rem;
     display: flex;
     border-bottom: 1px solid #4c4c4c;
+    align-items: flex-start;
 
     &:last-of-type {
         border-bottom: none;
@@ -34,6 +35,14 @@
                 color: #888888;
                 font-size: 0.95rem;
                 margin-top: 0.2rem;
+
+                a {
+                    color: #888888;
+                    text-decoration: none;
+                    &:hover {
+                        color: #fff;
+                    }
+                }
             }
         }
 
