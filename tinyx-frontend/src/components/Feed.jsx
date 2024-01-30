@@ -4,13 +4,14 @@ import WritePost from "./WritePost";
 import "./styles/Feed.scss";
 import Post from "./Post";
 import axios from "axios";
+import { getAllPosts } from "../api.js";
 
 export default function Feed() {
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [posts, setPosts] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get("http://localhost:9000/repo-post/api/posts").then((res) => {
+        getAllPosts().then((res) => {
             setPosts(res.data);
         });
     }, []);
@@ -40,6 +41,7 @@ export default function Feed() {
                     image={post.media}
                     date={post.created_date}
                     post={post.repost}
+                    id={post.id}
                 />
             ))}
         </div>

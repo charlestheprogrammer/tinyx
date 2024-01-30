@@ -35,4 +35,22 @@
             border-radius: 50%;
         }
     }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .switch {
+        fill: #ffffff;
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: #1a1a1a;
+        padding: 0.35rem;
+        border-radius: 50%;
+        cursor: pointer;
+    }
 }

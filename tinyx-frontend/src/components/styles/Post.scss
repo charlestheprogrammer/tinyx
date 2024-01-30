@@ -57,6 +57,18 @@
                 align-items: center;
                 gap: 0.2rem;
 
+                &.like {
+                    &:hover,
+                    &.liked {
+                        cursor: pointer;
+                        color: #f10f75;
+
+                        svg {
+                            fill: #f10f75;
+                        }
+                    }
+                }
+
                 svg {
                     fill: #888888;
                     height: 1.2rem;

@@ -6,42 +6,119 @@ import { Link, useParams } from "react-router-dom";
 import Post from "./Post.jsx";
 import axios from "axios";
 import profilePicture from "../assets/pp.jpeg";
+import {
+    blockUser,
+    followUser,
+    getFollowersByUserId,
+    getFollowsByUserId,
+    getPostsByAuthor,
+    getUserInfosByUsername,
+    isUserBlocked,
+    unblockUser,
+    unfollowUser,
+} from "../api.js";
+import { selectAccountId } from "../store/Account.js";
+import { useSelector } from "react-redux";
 
 export default function User() {
     const { user } = useParams();
+    const accountId = useSelector(selectAccountId);
 
     const [posts, setPosts] = React.useState([]);
     const [userInfos, setUserInfos] = React.useState({});
+    const [isAccountOwner, setIsAccountOwner] = React.useState(false);
+    const [following, setFollowing] = React.useState(false);
+    const [followers, setFollowers] = React.useState([]);
+    const [blocked, setBlocked] = React.useState(false);
+    const [follows, setFollows] = React.useState([]);
 
     React.useEffect(() => {
         document.title = `@${user} | TinyX`;
-        axios
-            .get(`http://localhost:9000/api/user/by_username/${user}`)
-            .then((res) => {
-                setUserInfos(res.data);
-            });
+        getUserInfosByUsername(user).then((res) => {
+            setUserInfos(res.data);
+            setIsAccountOwner(accountId === res.data.id);
+        });
     }, [user]);
 
     React.useEffect(() => {
+        setIsAccountOwner(accountId === userInfos.id);
+        setFollowing(followers.some((follower) => follower === accountId));
         if (!userInfos.id) return;
-        axios
-            .get(
-                `http://localhost:9000/repo-post/api/posts/by_author/${userInfos.id}`
-            )
-            .then((res) => {
-                setPosts(res.data);
-            });
+        isUserBlocked(userInfos.id).then((res) => {
+            console.log(res);
+            setBlocked(res);
+        });
+    }, [accountId, userInfos]);
+
+    React.useEffect(() => {
+        if (!userInfos.id) return;
+        getPostsByAuthor(userInfos.id).then((res) => {
+            setPosts(res.data);
+        });
+        getFollowersByUserId(userInfos.id).then((res) => {
+            setFollowers(res.data);
+            setFollowing(res.data.some((follower) => follower === accountId));
+        });
+        getFollowsByUserId(userInfos.id).then((res) => {
+            setFollows(res.data);
+        });
     }, [userInfos]);
+
+    const followCurrentUser = () => {
+        followUser(userInfos.id).then((res) => {
+            if (!res.ok) return;
+            setFollowing(true);
+            setFollowers([...followers, accountId]);
+        });
+    };
+
+    const unfollowCurrentUser = () => {
+        unfollowUser(userInfos.id).then((res) => {
+            if (!res.ok) return;
+            setFollowing(false);
+            setFollowers(
+                followers.filter((follower) => follower !== accountId)
+            );
+        });
+    };
+
+    const blockCurrentUser = () => {
+        blockUser(userInfos.id).then((res) => {
+            if (!res.ok) return;
+            setBlocked(true);
+            setFollowing(false);
+            setFollowers(
+                followers.filter((follower) => follower !== accountId)
+            );
+        });
+    };
+
+    const unblockCurrentUser = () => {
+        unblockUser(userInfos.id).then((res) => {
+            if (!res.ok) return;
+            setBlocked(false);
+        });
+    };
 
     return (
         <div className="user">
             <div className="topBar">
                 <Link to="/" className="backButton">
-                    Back
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-z80fyv r-19wmn03"
+                    >
+                        <g>
+                            <path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
+                        </g>
+                    </svg>
                 </Link>
                 <div className="infos">
                     <p>@{user}</p>
-                    <p>{posts.length ?? 0} posts</p>
+                    <p>
+                        {posts.length ?? 0} post{posts.length > 1 ? "s" : ""}
+                    </p>
                 </div>
             </div>
             <div className="banner">
@@ -54,20 +131,49 @@ export default function User() {
                 <img src={userInfos.imageUri ?? profilePicture} alt="" />
             </div>
             <div className="actions">
-                <button>Block</button>
-                <button>Follow</button>
+                {!isAccountOwner && (
+                    <button
+                        onClick={() =>
+                            blocked ? unblockCurrentUser() : blockCurrentUser()
+                        }
+                    >
+                        {blocked ? "Unblock" : "Block"}
+                    </button>
+                )}
+                {!isAccountOwner && !blocked && (
+                    <button
+                        onClick={() =>
+                            following
+                                ? unfollowCurrentUser()
+                                : followCurrentUser()
+                        }
+                    >
+                        {following ? "Unfollow" : "Follow"}
+                    </button>
+                )}
+                {isAccountOwner && <button>Edit profile</button>}
+            </div>
+            <div className="stats">
+                <div>
+                    <span>{follows.length ?? 0}</span>Following
+                </div>
+                <div>
+                    <span>{followers.length ?? 0}</span>Followers
+                </div>
             </div>
             <div className="posts">
-                {posts.map((post) => (
-                    <Post
-                        image={post.media}
-                        user={post.author}
-                        content={post.text}
-                        date={post.created_date}
-                        post={post.repost}
-                        key={post.id}
-                    />
-                ))}
+                {!blocked &&
+                    posts.map((post) => (
+                        <Post
+                            image={post.media}
+                            user={post.author}
+                            content={post.text}
+                            date={post.created_date}
+                            post={post.repost}
+                            key={post.id}
+                            id={post.id}
+                        />
+                    ))}
             </div>
         </div>
     );
