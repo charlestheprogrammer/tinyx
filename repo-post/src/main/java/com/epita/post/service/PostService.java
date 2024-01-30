@@ -2,6 +2,7 @@ package com.epita.post.service;
 
 import com.epita.post.controller.dto.PostDTO;
 import com.epita.post.entity.Post;
+import com.epita.post.external.BlockService;
 import com.epita.post.external.UserService;
 import com.epita.post.publisher.PostsPublisher;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,16 +20,22 @@ public class PostService {
 
     private final PostsPublisher postsPublisher;
 
+    private final BlockService blockService;
+
     @Inject
-    public PostService(UserService userService, PostsPublisher postsPublisher) {
+    public PostService(UserService userService, PostsPublisher postsPublisher, BlockService blockService) {
         this.userService = userService;
         this.postsPublisher = postsPublisher;
+        this.blockService = blockService;
     }
     public void createPost(Post post) {
         if (!userService.userExists(post.author))
             throw new BadRequestException("Author does not exist");
+        Post repost = Post.findPostById(post.repost);
         if (post.repost != null && Post.findPostById(post.repost) == null)
             throw new BadRequestException("Repost does not exist");
+        if (blockService.isBlocked(post.author.toString(), repost.author.toString()) || blockService.isBlocked(repost.author.toString(), post.author.toString()))
+            throw new ForbiddenException("You are blocked by the author of this post");
         post.persist();
         postsPublisher.publishNewPost(new PostDTO(post));
     }
@@ -36,10 +43,17 @@ public class PostService {
     public void createReply(Post post) {
         if (!userService.userExists(post.author))
             throw new BadRequestException("Author does not exist");
+        Post repost = Post.findPostById(post.repost);
         if (post.repost != null && Post.findPostById(post.repost) == null)
             throw new BadRequestException("Repost does not exist");
+        if (blockService.isBlocked(post.author.toString(), repost.author.toString()) || blockService.isBlocked(repost.author.toString(), post.author.toString()))
+            throw new ForbiddenException("You are blocked by the author of this post");
+        Post replyTo = Post.findPostById(post.replyTo);
         if (post.replyTo != null && Post.findPostById(post.replyTo) == null)
             throw new BadRequestException("Reply does not exist");
+        if (blockService.isBlocked(post.author.toString(), replyTo.author.toString()) || blockService.isBlocked(replyTo.author.toString(), post.author.toString()))
+            throw new ForbiddenException("You are blocked by the author of this post");
+
         post.persist();
         postsPublisher.publishNewPost(new PostDTO(post));
     }
