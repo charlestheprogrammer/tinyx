@@ -6,6 +6,7 @@ import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -52,5 +53,20 @@ public class PostService {
         if (Post.findPostById(postId) == null)
             throw new BadRequestException("Post does not exist");
         return Post.findRepliesToPost(postId, limit, offset);
+    }
+
+    public void deletePost(String id, String userId) {
+        try {
+            if (!userService.userExists(new ObjectId(userId)))
+                throw new BadRequestException("Author does not exist");
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Author does not exist");
+        }
+        Post post = Post.findPostById(id);
+        if (post == null)
+            throw new BadRequestException("Post does not exist");
+        if (!post.author.toString().equals(userId))
+            throw new ForbiddenException("You are not the author of this post");
+        post.delete();
     }
 }

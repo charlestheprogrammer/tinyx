@@ -28,6 +28,8 @@ public class PostController {
     @POST
     @Path("/post")
     public void createPost(@HeaderParam("X-user-id") String userId, CreatePostDTO postDTO) {
+        if (userId == null || userId.isEmpty())
+            throw new BadRequestException("X-user-id header is missing");
         PostDTO post = postDTO.toPostDTO();
         post.setAuthor(userId);
         postService.createPost(post.toEntity());
@@ -36,6 +38,8 @@ public class PostController {
     @POST
     @Path("/reply/{postId}")
     public void createReply(CreatePostDTO postDTO, @PathParam("postId") String postId, @HeaderParam("X-user-id") String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new BadRequestException("X-user-id header is missing");
         PostDTO post = postDTO.toPostDTO();
         post.setAuthor(userId);
         post.replyTo = postId;
@@ -60,5 +64,13 @@ public class PostController {
         if (limit == 0)
             limit = 50;
         return postService.getReplies(postId, limit, offset).stream().map(PostDTO::new).toList();
+    }
+
+    @DELETE
+    @Path("/post/{postId}")
+    public void deletePost(@PathParam("postId") String postId, @HeaderParam("X-user-id") String userId) {
+        if (userId == null || userId.isEmpty())
+            throw new BadRequestException("X-user-id header is missing");
+        postService.deletePost(postId, userId);
     }
 }
