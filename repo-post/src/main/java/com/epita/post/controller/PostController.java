@@ -1,5 +1,6 @@
 package com.epita.post.controller;
 
+import com.epita.post.controller.dto.CreatePostDTO;
 import com.epita.post.controller.dto.PostDTO;
 import com.epita.post.service.PostService;
 import jakarta.enterprise.context.RequestScoped;
@@ -26,8 +27,19 @@ public class PostController {
 
     @POST
     @Path("/post")
-    public void createPost(PostDTO postDTO) {
-        postService.createPost(postDTO.toEntity());
+    public void createPost(@HeaderParam("X-user-id") String userId, CreatePostDTO postDTO) {
+        PostDTO post = postDTO.toPostDTO();
+        post.setAuthor(userId);
+        postService.createPost(post.toEntity());
+    }
+
+    @POST
+    @Path("/reply/{postId}")
+    public void createReply(CreatePostDTO postDTO, @PathParam("postId") String postId, @HeaderParam("X-user-id") String userId) {
+        PostDTO post = postDTO.toPostDTO();
+        post.setAuthor(userId);
+        post.replyTo = postId;
+        postService.createReply(post.toEntity());
     }
 
     @GET

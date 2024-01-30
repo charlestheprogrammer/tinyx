@@ -1,6 +1,7 @@
 package com.epita.post.controller.dto;
 
 import com.epita.post.entity.Post;
+import jakarta.ws.rs.BadRequestException;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 
@@ -18,6 +19,8 @@ public class PostDTO {
     public String author;
 
     public LocalDateTime created_date;
+
+    public String replyTo;
 
     public void setId(String id) {
         this.id = id;
@@ -43,6 +46,10 @@ public class PostDTO {
         this.created_date = created_date;
     }
 
+    public void setReplyTo(String replyTo) {
+        this.replyTo = replyTo;
+    }
+
     public PostDTO() {
     }
 
@@ -57,8 +64,13 @@ public class PostDTO {
     }
 
     public Post toEntity() {
-        ObjectId postAuthor = author != null ? new ObjectId(this.author) : null;
-        ObjectId postRepost = repost != null ? new ObjectId(this.repost) : null;
-        return new Post(text, postAuthor, postRepost, media);
+        try {
+            ObjectId postAuthor = author != null ? new ObjectId(this.author) : null;
+            ObjectId postRepost = repost != null ? new ObjectId(this.repost) : null;
+            ObjectId postReplyTo = this.replyTo != null ? new ObjectId(this.replyTo) : null;
+            return new Post(text, postAuthor, postRepost, media, postReplyTo);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid id");
+        }
     }
 }
