@@ -23,7 +23,7 @@ export default function Account() {
     }, []);
 
     React.useEffect(() => {
-        if (users.length === 0) return;
+        if (!users || users.length === 0) return;
         setSelectedUser(users[selectedUserIndex]);
         setUser(users[selectedUserIndex].id);
         dispatch(connect(users[selectedUserIndex]));

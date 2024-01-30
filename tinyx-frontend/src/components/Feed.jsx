@@ -12,6 +12,7 @@ export default function Feed() {
 
     React.useEffect(() => {
         getAllPosts().then((res) => {
+            if (!res.ok) return;
             setPosts(res.data);
         });
     }, []);

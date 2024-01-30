@@ -35,15 +35,16 @@ export default function User() {
     React.useEffect(() => {
         document.title = `@${user} | TinyX`;
         getUserInfosByUsername(user).then((res) => {
+            if (!res.ok) return;
             setUserInfos(res.data);
             setIsAccountOwner(accountId === res.data.id);
         });
     }, [user]);
 
     React.useEffect(() => {
+        if (!userInfos || !userInfos.id) return;
         setIsAccountOwner(accountId === userInfos.id);
         setFollowing(followers.some((follower) => follower === accountId));
-        if (!userInfos.id) return;
         isUserBlocked(userInfos.id).then((res) => {
             console.log(res);
             setBlocked(res);
@@ -51,8 +52,9 @@ export default function User() {
     }, [accountId, userInfos]);
 
     React.useEffect(() => {
-        if (!userInfos.id) return;
+        if (!userInfos || !userInfos.id) return;
         getPostsByAuthor(userInfos.id).then((res) => {
+            if (!res.ok) return;
             setPosts(res.data);
         });
         getFollowersByUserId(userInfos.id).then((res) => {
@@ -65,6 +67,7 @@ export default function User() {
     }, [userInfos]);
 
     const followCurrentUser = () => {
+        if (!userInfos || !userInfos.id) return;
         followUser(userInfos.id).then((res) => {
             if (!res.ok) return;
             setFollowing(true);
@@ -73,6 +76,7 @@ export default function User() {
     };
 
     const unfollowCurrentUser = () => {
+        if (!userInfos || !userInfos.id) return;
         unfollowUser(userInfos.id).then((res) => {
             if (!res.ok) return;
             setFollowing(false);
@@ -83,6 +87,7 @@ export default function User() {
     };
 
     const blockCurrentUser = () => {
+        if (!userInfos || !userInfos.id) return;
         blockUser(userInfos.id).then((res) => {
             if (!res.ok) return;
             setBlocked(true);
@@ -94,6 +99,7 @@ export default function User() {
     };
 
     const unblockCurrentUser = () => {
+        if (!userInfos || !userInfos.id) return;
         unblockUser(userInfos.id).then((res) => {
             if (!res.ok) return;
             setBlocked(false);
@@ -123,12 +129,12 @@ export default function User() {
             </div>
             <div className="banner">
                 <img
-                    src={userInfos.bannerUri ?? "https://picsum.photos/800/300"}
+                    src={userInfos?.bannerUri ?? "https://picsum.photos/800/300"}
                     alt=""
                 />
             </div>
             <div className="profilePicture">
-                <img src={userInfos.imageUri ?? profilePicture} alt="" />
+                <img src={userInfos?.imageUri ?? profilePicture} alt="" />
             </div>
             <div className="actions">
                 {!isAccountOwner && (
