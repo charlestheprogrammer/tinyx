@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ApplicationScoped
 @Getter
@@ -31,6 +32,14 @@ public class Like extends PanacheMongoEntity {
 
     public static Like findLike(ObjectId id) {
         return find("_id", id).firstResult();
+    }
+
+    public static List<Like> findLikes(ObjectId postId) {
+        return find("postId", postId).list();
+    }
+
+    public static List<Like> findLikesFromUser(ObjectId userId) {
+        return find("userId", userId).list();
     }
 
     public static long countLikes(ObjectId postId) {

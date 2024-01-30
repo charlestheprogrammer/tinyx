@@ -7,6 +7,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 @ApplicationScoped
 public class LikeService {
     private final PostService postService;
@@ -34,5 +36,13 @@ public class LikeService {
         }
         Like like = new Like(postId, userId);
         like.persist();
+    }
+
+    public List<String> getLikes(ObjectId postId) {
+        return Like.findLikes(postId).stream().map(like -> like.userId.toString()).toList();
+    }
+
+    public List<String> postsLikedBy(ObjectId userId) {
+        return Like.findLikesFromUser(userId).stream().map(like -> like.postId.toString()).toList();
     }
 }

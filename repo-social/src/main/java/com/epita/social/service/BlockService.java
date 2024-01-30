@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 @ApplicationScoped
 public class BlockService {
     private UserService userService;
@@ -50,5 +52,13 @@ public class BlockService {
         }
         Block block = Block.findActiveBlock(blocker, blocked);
         return block != null;
+    }
+
+    public List<String> getBlockedList(ObjectId blocker) {
+        return Block.findBlockedBy(blocker).stream().map(block -> block.blocked.toString()).toList();
+    }
+
+    public List<String> getUsersWhoBlocked(ObjectId blocked) {
+        return Block.findBlocked(blocked).stream().map(block -> block.blocker.toString()).toList();
     }
 }

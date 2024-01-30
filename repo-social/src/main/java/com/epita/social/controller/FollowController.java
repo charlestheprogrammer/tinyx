@@ -52,7 +52,7 @@ public class FollowController {
     }
 
     @GET
-    @Path("/followed/{followed}")
+    @Path("/is-followed/{followed}")
     public boolean isFollowed(@HeaderParam("X-user-id") String follower, @PathParam("followed") String followed) {
         if (follower == null || follower.isEmpty()) {
             throw new BadRequestException("X-user-id header is missing");
@@ -69,8 +69,8 @@ public class FollowController {
     }
 
     @GET
-    @Path("/followers")
-    public List<String> getFollowers(@HeaderParam("X-user-id") String followed) {
+    @Path("/followers/{followed}")
+    public List<String> getFollowers(@PathParam("followed") String followed) {
         if (followed == null || followed.isEmpty()) {
             throw new BadRequestException("X-user-id header is missing");
         }
@@ -84,8 +84,8 @@ public class FollowController {
     }
 
     @GET
-    @Path("/follows")
-    public List<String> getFollows(@HeaderParam("X-user-id") String follower) {
+    @Path("/follows/{follower}")
+    public List<String> getFollows(@PathParam("follower") String follower) {
         if (follower == null || follower.isEmpty()) {
             throw new BadRequestException("X-user-id header is missing");
         }

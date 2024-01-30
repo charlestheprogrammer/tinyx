@@ -5,6 +5,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 @RequestScoped
 @Consumes("application/json")
 @Produces("application/json")
@@ -81,5 +83,35 @@ public class BlockController {
             throw new BadRequestException("Invalid user id");
         }
         return blockService.isBlocked(blockerObject, blockedObject);
+    }
+
+    @GET
+    @Path("/blocked_list/{blocker}")
+    public List<String> getBlockedList(@PathParam("blocker") String blocker) {
+        if (blocker == null || blocker.isEmpty()) {
+            throw new BadRequestException("X-user-id header is missing");
+        }
+        ObjectId blockerObject;
+        try {
+            blockerObject = new ObjectId(blocker);
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid user id");
+        }
+        return blockService.getBlockedList(blockerObject);
+    }
+
+    @GET
+    @Path("/blocked_by_list/{blocked}")
+    public List<String> getUsersWhoBlocked(@PathParam("blocked") String blocked) {
+        if (blocked == null || blocked.isEmpty()) {
+            throw new BadRequestException("X-user-id header is missing");
+        }
+        ObjectId blockedObject;
+        try {
+            blockedObject = new ObjectId(blocked);
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid user id");
+        }
+        return blockService.getUsersWhoBlocked(blockedObject);
     }
 }
