@@ -1,8 +1,9 @@
 package com.epita.post.service;
 
+import com.epita.post.controller.dto.PostDTO;
 import com.epita.post.entity.Post;
 import com.epita.post.external.UserService;
-import io.quarkus.panache.common.Sort;
+import com.epita.post.publisher.PostsPublisher;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
@@ -15,9 +16,12 @@ import java.util.List;
 public class PostService {
     private final UserService userService;
 
+    private final PostsPublisher postsPublisher;
+
     @Inject
-    public PostService(UserService userService) {
+    public PostService(UserService userService, PostsPublisher postsPublisher) {
         this.userService = userService;
+        this.postsPublisher = postsPublisher;
     }
     public void createPost(Post post) {
         if (!userService.userExists(post.author))
@@ -25,6 +29,7 @@ public class PostService {
         if (post.repost != null && Post.findPostById(post.repost) == null)
             throw new BadRequestException("Repost does not exist");
         post.persist();
+        postsPublisher.publishNewPost(new PostDTO(post));
     }
 
     public void createReply(Post post) {
@@ -35,6 +40,7 @@ public class PostService {
         if (post.replyTo != null && Post.findPostById(post.replyTo) == null)
             throw new BadRequestException("Reply does not exist");
         post.persist();
+        postsPublisher.publishNewPost(new PostDTO(post));
     }
 
     public List<Post> getPosts() {
@@ -67,6 +73,7 @@ public class PostService {
             throw new BadRequestException("Post does not exist");
         if (!post.author.toString().equals(userId))
             throw new ForbiddenException("You are not the author of this post");
+        postsPublisher.publishDeletedPost(new PostDTO(post));
         post.delete();
     }
 }

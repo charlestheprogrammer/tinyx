@@ -1,6 +1,7 @@
 package com.epita.post.controller.dto;
 
 import com.epita.post.entity.Post;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 import lombok.Getter;
 import org.bson.types.ObjectId;
@@ -8,6 +9,7 @@ import org.bson.types.ObjectId;
 import java.time.LocalDateTime;
 
 @Getter
+@ApplicationScoped
 public class PostDTO {
     public String id;
     public String text;
