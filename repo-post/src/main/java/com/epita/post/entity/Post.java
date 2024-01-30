@@ -59,11 +59,7 @@ public class Post extends PanacheMongoEntity {
         return find("author", Sort.descending("created_date"), author).page(offset, limit).list();
     }
 
-    public static Post findPostByTitle(String title) {
-        return find("title", title).firstResult();
-    }
-
-    public static Post findPostByContent(String content) {
-        return find("content", content).firstResult();
+    public static List<Post> findRepliesToPost(String postId, int limit, int offset) {
+        return find("replyTo", Sort.descending("created_date"), new ObjectId(postId)).page(offset, limit).list();
     }
 }

@@ -61,6 +61,8 @@ public class PostDTO {
         this.created_date = post.created_date;
         if (post.repost != null)
             this.repost = post.repost.toString();
+        if (post.replyTo != null)
+            this.replyTo = post.replyTo.toString();
     }
 
     public Post toEntity() {

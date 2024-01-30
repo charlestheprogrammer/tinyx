@@ -47,4 +47,10 @@ public class PostService {
     public Post getPostById(String id) {
         return Post.findPostById(id);
     }
+
+    public List<Post> getReplies(String postId, int limit, int offset) {
+        if (Post.findPostById(postId) == null)
+            throw new BadRequestException("Post does not exist");
+        return Post.findRepliesToPost(postId, limit, offset);
+    }
 }

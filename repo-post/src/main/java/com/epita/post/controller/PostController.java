@@ -53,4 +53,12 @@ public class PostController {
     public PostDTO getPostById(String id) {
         return new PostDTO(postService.getPostById(id));
     }
+
+    @GET
+    @Path("/replies/{postId}")
+    public List<PostDTO> getReplies(@PathParam("postId") String postId, @QueryParam("limit") int limit, @QueryParam("offset") int offset) {
+        if (limit == 0)
+            limit = 50;
+        return postService.getReplies(postId, limit, offset).stream().map(PostDTO::new).toList();
+    }
 }
