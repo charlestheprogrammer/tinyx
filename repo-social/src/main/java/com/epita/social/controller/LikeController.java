@@ -32,6 +32,20 @@ public class LikeController {
         likeService.createLike(postObjectId, userObjectId);
     }
 
+    @DELETE
+    @Path("/like/{postId}")
+    public void deleteLike(@HeaderParam("X-user-id") String userId, @PathParam("postId") String postId) {
+        ObjectId postObjectId;
+        ObjectId userObjectId;
+        try {
+            postObjectId = new ObjectId(postId);
+            userObjectId = new ObjectId(userId);
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid id");
+        }
+        likeService.deleteLike(postObjectId, userObjectId);
+    }
+
     @GET
     @Path("/likes/post/{postId}")
     public List<String> getLikes(@PathParam("postId") String postId) {

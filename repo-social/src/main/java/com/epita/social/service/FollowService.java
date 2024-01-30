@@ -1,6 +1,7 @@
 package com.epita.social.service;
 
 import com.epita.social.entity.Follow;
+import com.epita.social.publisher.FollowPublisher;
 import com.epita.social.repository.ReactiveFollowRepository;
 import com.epita.social.external.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,10 +18,13 @@ public class FollowService {
 
     private final BlockService blockService;
 
-    public FollowService(UserService userService, ReactiveFollowRepository reactiveFollowRepository, BlockService blockService) {
+    private final FollowPublisher followPublisher;
+
+    public FollowService(UserService userService, ReactiveFollowRepository reactiveFollowRepository, BlockService blockService, FollowPublisher followPublisher) {
         this.userService = userService;
         this.reactiveFollowRepository = reactiveFollowRepository;
         this.blockService = blockService;
+        this.followPublisher = followPublisher;
     }
     public void follow(ObjectId follower, ObjectId followed) {
         if (!userService.userExists(follower) || !userService.userExists(followed)) {
@@ -31,6 +35,7 @@ public class FollowService {
         }
         Follow follow = new Follow(follower, followed);
         follow.persist();
+        followPublisher.publishFollow(follow);
     }
 
     public void unfollow(ObjectId follower, ObjectId followed) {
@@ -42,6 +47,7 @@ public class FollowService {
         }
         Follow follow = Follow.findFollow(follower, followed);
         if (follow != null) {
+            followPublisher.publishUnfollow(follow);
             follow.delete();
         }
     }

@@ -2,6 +2,7 @@ package com.epita.social.service;
 
 import com.epita.social.entity.Like;
 import com.epita.social.external.PostService;
+import com.epita.social.publisher.LikePublisher;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
@@ -15,9 +16,12 @@ public class LikeService {
 
     private final BlockService blockService;
 
-    public LikeService(PostService postService, BlockService blockService) {
+    private final LikePublisher likePublisher;
+
+    public LikeService(PostService postService, BlockService blockService, LikePublisher likePublisher) {
         this.postService = postService;
         this.blockService = blockService;
+        this.likePublisher = likePublisher;
     }
 
     public void createLike(ObjectId postId, ObjectId userId) {
@@ -36,6 +40,16 @@ public class LikeService {
         }
         Like like = new Like(postId, userId);
         like.persist();
+        likePublisher.publishLike(like);
+    }
+
+    public void deleteLike(ObjectId postId, ObjectId userId) {
+        Like like = Like.findLike(postId, userId);
+        if (like == null) {
+            throw new BadRequestException("You did not like this post");
+        }
+        like.delete();
+        likePublisher.publishUnlike(like);
     }
 
     public List<String> getLikes(ObjectId postId) {
