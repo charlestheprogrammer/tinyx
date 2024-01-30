@@ -2,12 +2,14 @@ package com.epita.social.entity;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.Getter;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @ApplicationScoped
+@Getter
 public class Block extends PanacheMongoEntity {
     public ObjectId blocker;
 

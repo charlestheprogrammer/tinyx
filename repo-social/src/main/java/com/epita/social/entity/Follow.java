@@ -2,11 +2,13 @@ package com.epita.social.entity;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.Getter;
 import org.bson.types.ObjectId;
 
 import java.util.List;
 
 @ApplicationScoped
+@Getter
 public class Follow extends PanacheMongoEntity {
     public ObjectId follower;
 

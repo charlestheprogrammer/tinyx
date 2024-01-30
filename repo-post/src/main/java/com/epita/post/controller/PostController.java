@@ -59,6 +59,12 @@ public class PostController {
     }
 
     @GET
+    @Path("/post/by_id_get_author/{id}")
+    public String getPostAuthorById(String id) {
+        return postService.getPostById(id).author.toString();
+    }
+
+    @GET
     @Path("/replies/{postId}")
     public List<PostDTO> getReplies(@PathParam("postId") String postId, @QueryParam("limit") int limit, @QueryParam("offset") int offset) {
         if (limit == 0)

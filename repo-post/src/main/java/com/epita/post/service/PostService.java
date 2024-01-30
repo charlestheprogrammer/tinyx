@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotFoundException;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -52,7 +53,10 @@ public class PostService {
     }
 
     public Post getPostById(String id) {
-        return Post.findPostById(id);
+        Post post = Post.findPostById(id);
+        if (post == null)
+            throw new NotFoundException("Post does not exist");
+        return post;
     }
 
     public List<Post> getReplies(String postId, int limit, int offset) {
