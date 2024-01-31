@@ -91,5 +91,7 @@ public class FollowService {
     public void deleteFollowsBetweenUsers(ObjectId user1, ObjectId user2) {
         reactiveFollowRepository.deleteFollow(user1, user2);
         reactiveFollowRepository.deleteFollow(user2, user1);
+        followPublisher.publishUnfollow(new Follow(user1, user2));
+        followPublisher.publishUnfollow(new Follow(user2, user1));
     }
 }

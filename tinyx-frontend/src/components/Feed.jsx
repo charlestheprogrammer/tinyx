@@ -4,18 +4,34 @@ import WritePost from "./WritePost";
 import "./styles/Feed.scss";
 import Post from "./Post";
 import axios from "axios";
-import { getAllPosts } from "../api.js";
+import {getAllPosts, getHomeTimeline, getPostById} from "../api.js";
+import {useSelector} from "react-redux";
+import {selectAccountId} from "../store/Account.js";
 
 export default function Feed() {
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [posts, setPosts] = React.useState([]);
 
+    const accountId = useSelector(selectAccountId)
+
     React.useEffect(() => {
-        getAllPosts().then((res) => {
+        if (!accountId) return;
+        getHomeTimeline().then(async (res) => {
             if (!res.ok) return;
-            setPosts(res.data);
+            const timelinePosts = [];
+            for (const postId of res.data.posts) {
+                const postRequest = await getPostById(postId);
+                if (!postRequest.ok) continue;
+                timelinePosts.push(postRequest.data);
+            }
+            setPosts(timelinePosts);
         });
-    }, []);
+        document.title = "TinyX";
+    }, [accountId]);
+
+    const onPostDeletion = (id) => {
+        setPosts(posts.filter((post) => post.id !== id));
+    }
 
     return (
         <div className="feed">
@@ -43,6 +59,7 @@ export default function Feed() {
                     date={post.created_date}
                     post={post.repost}
                     id={post.id}
+                    onDelete={onPostDeletion}
                 />
             ))}
         </div>

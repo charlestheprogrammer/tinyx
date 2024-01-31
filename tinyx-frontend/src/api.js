@@ -1,6 +1,6 @@
 import apisauce from "apisauce";
 
-const baseURL = "http://localhost:8000/";
+const baseURL = "http://localhost:9000/";
 
 const api = apisauce.create({
     baseURL,
@@ -24,6 +24,11 @@ export const getPostById = (postId) =>
     api.get(`/repo-post/api/post/by_id/${postId}`);
 
 export const getAllPosts = () => api.get(`/repo-post/api/posts`);
+
+export const createPost = (post) => api.post(`/repo-post/api/post`, post);
+
+export const deletePost = (postId) =>
+    api.delete(`/repo-post/api/post/${postId}`);
 
 export const getAllUsers = () => api.get(`/api/users`);
 
@@ -59,6 +64,12 @@ export const blockUser = (userId) =>
 
 export const unblockUser = (userId) =>
     api.post(`/repo-social/api/unblock/${userId}`);
+
+export const getUserTimeline = (userId) =>
+    api.get(`/srvc-user-timeline/api/timeline/${userId}`);
+
+export const getHomeTimeline = () =>
+    api.get(`/srvc-home-timeline/api/timeline`);
 
 export default {
     api,

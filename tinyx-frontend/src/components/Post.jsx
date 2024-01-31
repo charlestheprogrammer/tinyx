@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import profilePicture from "../assets/pp.jpeg";
 import "./styles/Post.scss";
 import {
+    deletePost,
     getLikesByPostId,
     getPostById,
     getUserInfosById,
@@ -20,7 +21,7 @@ const dateOptions = {
     day: "numeric",
 };
 
-export default function Post({ user, content, image, date, post, id }) {
+export default function Post({ user, content, image, date, post, id, onDelete }) {
     const [userInfos, setUserInfos] = React.useState({});
     const [repostInfos, setRepostInfos] = React.useState({});
     const [loading, setLoading] = React.useState(true);
@@ -73,6 +74,13 @@ export default function Post({ user, content, image, date, post, id }) {
         });
     };
 
+    const deleteOwnPost = () => {
+        deletePost(id).then((res) => {
+            if (!res.ok) return;
+            onDelete && onDelete(id);
+        });
+    }
+
     if (loading)
         return (
             <div className="post">
@@ -107,6 +115,7 @@ export default function Post({ user, content, image, date, post, id }) {
                         content={repostInfos.text}
                         image={repostInfos.media}
                         date={repostInfos.created_date}
+                        post={repostInfos.repost}
                     />
                 )}
                 <div className="actions">
@@ -148,19 +157,25 @@ export default function Post({ user, content, image, date, post, id }) {
                         {likes}
                     </div>
                     <div>
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                             viewBox="0 0 408.483 408.483" onClick={deleteOwnPost}>
+<g>
+	<g>
+		<path d="M87.748,388.784c0.461,11.01,9.521,19.699,20.539,19.699h191.911c11.018,0,20.078-8.689,20.539-19.699l13.705-289.316
+			H74.043L87.748,388.784z M247.655,171.329c0-4.61,3.738-8.349,8.35-8.349h13.355c4.609,0,8.35,3.738,8.35,8.349v165.293
+			c0,4.611-3.738,8.349-8.35,8.349h-13.355c-4.61,0-8.35-3.736-8.35-8.349V171.329z M189.216,171.329
+			c0-4.61,3.738-8.349,8.349-8.349h13.355c4.609,0,8.349,3.738,8.349,8.349v165.293c0,4.611-3.737,8.349-8.349,8.349h-13.355
+			c-4.61,0-8.349-3.736-8.349-8.349V171.329L189.216,171.329z M130.775,171.329c0-4.61,3.738-8.349,8.349-8.349h13.356
+			c4.61,0,8.349,3.738,8.349,8.349v165.293c0,4.611-3.738,8.349-8.349,8.349h-13.356c-4.61,0-8.349-3.736-8.349-8.349V171.329z"/>
+        <path d="M343.567,21.043h-88.535V4.305c0-2.377-1.927-4.305-4.305-4.305h-92.971c-2.377,0-4.304,1.928-4.304,4.305v16.737H64.916
+			c-7.125,0-12.9,5.776-12.9,12.901V74.47h304.451V33.944C356.467,26.819,350.692,21.043,343.567,21.043z"/>
+	</g>
+</g>
+</svg>
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
-                            className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1xvli5t r-1hdv0qi"
-                        >
-                            <g>
-                                <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z"></path>
-                            </g>
-                        </svg>
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1xvli5t r-1hdv0qi"
+                            onClick={() => navigator.clipboard.writeText(id)}
                         >
                             <g>
                                 <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>

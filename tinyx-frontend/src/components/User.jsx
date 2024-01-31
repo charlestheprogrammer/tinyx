@@ -10,9 +10,9 @@ import {
     blockUser,
     followUser,
     getFollowersByUserId,
-    getFollowsByUserId,
+    getFollowsByUserId, getPostById,
     getPostsByAuthor,
-    getUserInfosByUsername,
+    getUserInfosByUsername, getUserTimeline,
     isUserBlocked,
     unblockUser,
     unfollowUser,
@@ -31,9 +31,10 @@ export default function User() {
     const [followers, setFollowers] = React.useState([]);
     const [blocked, setBlocked] = React.useState(false);
     const [follows, setFollows] = React.useState([]);
+    const [nbPost, setNbPost] = React.useState(0);
 
     React.useEffect(() => {
-        document.title = `@${user} | TinyX`;
+        document.title = `@${user} / TinyX`;
         getUserInfosByUsername(user).then((res) => {
             if (!res.ok) return;
             setUserInfos(res.data);
@@ -55,7 +56,17 @@ export default function User() {
         if (!userInfos || !userInfos.id) return;
         getPostsByAuthor(userInfos.id).then((res) => {
             if (!res.ok) return;
-            setPosts(res.data);
+            setNbPost(res.data.length);
+        });
+        getUserTimeline(userInfos.id).then(async (res) => {
+            if (!res.ok) return;
+            const timelinePosts = [];
+            for (const postId of res.data.posts) {
+                const postRequest = await getPostById(postId);
+                if (!postRequest.ok) continue;
+                timelinePosts.push(postRequest.data);
+            }
+            setPosts(timelinePosts);
         });
         getFollowersByUserId(userInfos.id).then((res) => {
             setFollowers(res.data);
@@ -106,6 +117,12 @@ export default function User() {
         });
     };
 
+    const onPostDeletion = (id) => {
+        setPosts(posts.filter((post) => post.id !== id));
+        if (isAccountOwner)
+            setNbPost(nbPost - 1);
+    }
+
     return (
         <div className="user">
             <div className="topBar">
@@ -123,7 +140,7 @@ export default function User() {
                 <div className="infos">
                     <p>@{user}</p>
                     <p>
-                        {posts.length ?? 0} post{posts.length > 1 ? "s" : ""}
+                        {nbPost ?? 0} post{nbPost > 1 ? "s" : ""}
                     </p>
                 </div>
             </div>
@@ -178,6 +195,7 @@ export default function User() {
                             post={post.repost}
                             key={post.id}
                             id={post.id}
+                            onDelete={onPostDeletion}
                         />
                     ))}
             </div>
