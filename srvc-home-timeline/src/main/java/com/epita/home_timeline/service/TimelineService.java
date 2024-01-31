@@ -1,6 +1,5 @@
 package com.epita.home_timeline.service;
 
-import com.epita.home_timeline.controller.dto.TimelineItemDTO;
 import com.epita.home_timeline.entity.Timeline;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,17 +18,16 @@ public class TimelineService {
         final var session = neo4jDriver.session();
         final var foundNode = session.executeRead(tx -> tx
                 .run("MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)<-[:WRITTEN_BY]-(p:Post) " +
-                        "RETURN p.id AS id, null as userWhoLike " +
+                        "RETURN p.id AS id " +
                         "UNION " +
                         "MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) " +
-                        "RETURN p.id AS id, f.id as userWhoLike " +
+                        "RETURN p.id AS id " +
                         "ORDER BY l.date, p.date DESC")
                 .list());
-        List<TimelineItemDTO> timeline = new ArrayList<>();
+        List<String> timeline = new ArrayList<>();
         foundNode.forEach(record -> {
             final var postId = record.get("id").asString();
-            final var userWhoLike = record.get("userWhoLike");
-            timeline.add(new TimelineItemDTO(postId, userWhoLike.asString()));
+            timeline.add(postId);
         });
         Timeline existingTimeline = Timeline.findByUserId(userId);
         if (existingTimeline != null) {

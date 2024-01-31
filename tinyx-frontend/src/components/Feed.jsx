@@ -19,11 +19,9 @@ export default function Feed() {
         getHomeTimeline().then(async (res) => {
             if (!res.ok) return;
             const timelinePosts = [];
-            for (const postInfos of res.data.posts) {
-                const postRequest = await getPostById(postInfos.postId);
+            for (const postId of res.data.posts) {
+                const postRequest = await getPostById(postId);
                 if (!postRequest.ok) continue;
-                if (postInfos.userWhoLiked !== "null" && postInfos.userWhoLiked !== accountId)
-                    postRequest.data.likedBy = postInfos.userWhoLiked;
                 timelinePosts.push(postRequest.data);
             }
             setPosts(timelinePosts);
@@ -62,7 +60,6 @@ export default function Feed() {
                     post={post.repost}
                     id={post.id}
                     onDelete={onPostDeletion}
-                    likedBy={post.likedBy}
                 />
             ))}
         </div>
