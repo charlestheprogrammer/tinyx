@@ -1,37 +1,57 @@
 package com.epita.tinyxlib.entities;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.bson.types.ObjectId;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@MongoEntity(collection="Users")
 public class User extends PanacheMongoEntity {
-    // getters and setters
-    private String username;
-    private String displayName;
-    private Integer followersCount;
-    private Integer followingCount;
-    private LocalDateTime createdAt;
 
-    public static User findByUsername(String username) {
+    public String username;
+
+    public String role;
+
+    public String imageUri;
+
+    public String bannerUri;
+
+    public User() {
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public void setBannerUri(String bannerUri) {
+        this.bannerUri = bannerUri;
+    }
+
+    public User(String username, String role, String imageUri, String bannerUri) {
+        this.username = username;
+        this.role = role;
+        this.imageUri = imageUri;
+        this.bannerUri = bannerUri;
+    }
+
+    public static User findUserByUsername(String username) {
         return find("username", username).firstResult();
     }
 
-    public static User findByID(String id) {
-        return find("id", id).firstResult();
+    public static User findUserByUsernameAndRole(String username, String role) {
+        return find("username = ?1 and role = ?2", username, role).firstResult();
     }
 
-    public static List<User> findAllUsers() {
-        return findAll().list();
+    public static User findUserById(String id) {
+        return find("_id", new ObjectId(id)).firstResult();
     }
 }

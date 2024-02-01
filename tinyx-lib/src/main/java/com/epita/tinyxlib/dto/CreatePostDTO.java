@@ -1,4 +1,4 @@
-package com.epita.post.controller.dto;
+package com.epita.tinyxlib.dto;
 
 import lombok.Getter;
 

@@ -1,50 +1,65 @@
 package com.epita.tinyxlib.entities;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.quarkus.panache.common.Sort;
+import jakarta.ws.rs.BadRequestException;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@MongoEntity(collection="Posts")
 public class Post extends PanacheMongoEntity {
-    private ObjectId authorId;
-    private LocalDateTime postedAt;
-    private String text;
-    private String media;
-    private ObjectId quotedPostId;
-    private ObjectId parentPostId;
+    public String text;
+
+    public ObjectId author;
+
+    public ObjectId repost;
+
+    public String media;
+
+    public LocalDateTime created_date;
+
+    public ObjectId replyTo;
+
+    public Post() {
+    }
+
+    public Post(String text, ObjectId author, ObjectId repost, String media, ObjectId replyTo) {
+        if (text == null && media == null && repost == null) {
+            throw new BadRequestException("Post must contain at least one of text, media, repost");
+        }
+        if (text != null && media != null && repost != null) {
+            throw new BadRequestException("Post can contain at most two of text, media, repost");
+        }
+        this.text = text;
+        this.author = author;
+        this.repost = repost;
+        this.media = media;
+        this.created_date = LocalDateTime.now();
+        this.replyTo = replyTo;
+    }
 
     public static List<Post> findAllPosts() {
-        return findAll().list();
+        return find("replyTo is null", Sort.descending("created_date")).list();
     }
 
-    public static Post findByID(ObjectId id) {
-        return find("id", id).firstResult();
+    public static Post findPostById(String id) {
+        return find("_id", new ObjectId(id)).firstResult();
     }
 
-    public static Post findByAuthorId(ObjectId authorId) {
-        return find("authorId", authorId).firstResult();
+    public static Post findPostById(ObjectId id) {
+        return find("_id", id).firstResult();
     }
 
-    public static List<Post> findByParentPostId(ObjectId parentPostId) {
-        return find("parentPostId", parentPostId).list();
+    public static List<Post> findPostsByAuthor(ObjectId author) {
+        return find("author = ?1 and replyTo is null", Sort.descending("created_date"), author).list();
     }
 
-    public static List<Post> findByQuotedPostId(ObjectId quotedPostId) {
-        return find("quotedPostId", quotedPostId).list();
+    public static List<Post> findPostsByAuthor(ObjectId author, int limit, int offset) {
+        return find("author", Sort.descending("created_date"), author).page(offset, limit).list();
     }
 
-    public static List<Post> findPostedAfter(LocalDateTime postedAfter) {
-        return find("postedAt > ?1", postedAfter).list();
+    public static List<Post> findRepliesToPost(String postId, int limit, int offset) {
+        return find("replyTo", Sort.descending("created_date"), new ObjectId(postId)).page(offset, limit).list();
     }
 }

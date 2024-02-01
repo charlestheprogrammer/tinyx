@@ -1,15 +1,41 @@
 package com.epita.tinyxlib.dto;
 
-import lombok.Data;
 
-import java.time.LocalDateTime;
+import com.epita.tinyxlib.entities.Timeline;
+
 import java.util.List;
-import java.util.UUID;
 
-@Data
 public class TimelineDTO {
-    private UUID _id;
-    private LocalDateTime fetchedAt;
-    private List<PostDTO> postDTOS;
-    private UserDTO specificUser;  // the user for whom the timeline was fetched (using their relations)
+    private List<TimelineItemDTO> posts;
+
+    private String userId;
+
+    public TimelineDTO() {
+    }
+
+    public TimelineDTO(List<TimelineItemDTO> posts, String userId) {
+        this.posts = posts;
+        this.userId = userId;
+    }
+
+    public TimelineDTO(Timeline timeline) {
+        this.posts = timeline.posts;
+        this.userId = timeline.userId.toString();
+    }
+
+    public List<TimelineItemDTO> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<TimelineItemDTO> posts) {
+        this.posts = posts;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
