@@ -1,7 +1,7 @@
 package com.epita.home_timeline.subscriber;
 
 
-import com.epita.home_timeline.controller.dto.PostDTO;
+import com.epita.tinyxlib.dto.PostDTO;
 import com.epita.home_timeline.external.SocialService;
 import com.epita.home_timeline.service.TimelineService;
 import io.quarkus.redis.datasource.RedisDataSource;

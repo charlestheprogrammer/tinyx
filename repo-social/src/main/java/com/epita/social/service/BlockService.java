@@ -1,6 +1,6 @@
 package com.epita.social.service;
 
-import com.epita.social.entity.Block;
+import com.epita.tinyxlib.entities.Block;
 import com.epita.social.external.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;

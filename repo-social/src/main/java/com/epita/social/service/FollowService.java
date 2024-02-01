@@ -1,6 +1,6 @@
 package com.epita.social.service;
 
-import com.epita.social.entity.Follow;
+import com.epita.tinyxlib.entities.Follow;
 import com.epita.social.publisher.FollowPublisher;
 import com.epita.social.repository.ReactiveFollowRepository;
 import com.epita.social.external.UserService;

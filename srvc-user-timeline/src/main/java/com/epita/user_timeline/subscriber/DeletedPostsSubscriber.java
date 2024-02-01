@@ -1,6 +1,6 @@
 package com.epita.user_timeline.subscriber;
 
-import com.epita.user_timeline.controller.dto.PostDTO;
+import com.epita.tinyxlib.dto.PostDTO;
 import com.epita.user_timeline.service.TimelineService;
 import io.quarkus.redis.datasource.RedisDataSource;
 import io.quarkus.redis.datasource.pubsub.PubSubCommands;

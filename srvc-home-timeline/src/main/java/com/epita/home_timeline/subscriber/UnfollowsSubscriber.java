@@ -1,6 +1,6 @@
 package com.epita.home_timeline.subscriber;
 
-import com.epita.home_timeline.controller.dto.FollowDTO;
+import com.epita.tinyxlib.dto.FollowDTO;
 import com.epita.home_timeline.service.TimelineService;
 import io.quarkus.redis.datasource.RedisDataSource;
 import io.quarkus.redis.datasource.pubsub.PubSubCommands;

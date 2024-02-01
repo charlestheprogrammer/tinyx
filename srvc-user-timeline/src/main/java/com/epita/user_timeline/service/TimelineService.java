@@ -1,6 +1,7 @@
 package com.epita.user_timeline.service;
 
-import com.epita.user_timeline.entity.Timeline;
+import com.epita.tinyxlib.dto.TimelineItemDTO;
+import com.epita.tinyxlib.entities.Timeline;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.bson.types.ObjectId;
@@ -24,10 +25,10 @@ public class TimelineService {
                         "RETURN p.id AS id " +
                         "ORDER BY l.date, p.date DESC")
                 .list());
-        List<String> timeline = new ArrayList<>();
+        List<TimelineItemDTO> timeline = new ArrayList<>();
         foundNode.forEach(record -> {
             final var postId = record.get("id").asString();
-            timeline.add(postId);
+            timeline.add(new TimelineItemDTO(postId, userId.toString()));
         });
         Timeline existingTimeline = Timeline.findByUserId(userId);
         if (existingTimeline != null) {

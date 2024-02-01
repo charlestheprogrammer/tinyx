@@ -1,7 +1,7 @@
 package com.epita.post.service;
 
-import com.epita.post.controller.dto.PostDTO;
-import com.epita.post.entity.Post;
+import com.epita.tinyxlib.dto.PostDTO;
+import com.epita.tinyxlib.entities.Post;
 import com.epita.post.external.BlockService;
 import com.epita.post.external.UserService;
 import com.epita.post.publisher.PostsPublisher;

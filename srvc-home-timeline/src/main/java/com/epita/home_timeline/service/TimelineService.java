@@ -1,6 +1,7 @@
 package com.epita.home_timeline.service;
 
-import com.epita.home_timeline.entity.Timeline;
+import com.epita.tinyxlib.dto.TimelineItemDTO;
+import com.epita.tinyxlib.entities.Timeline;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.bson.types.ObjectId;
@@ -18,16 +19,17 @@ public class TimelineService {
         final var session = neo4jDriver.session();
         final var foundNode = session.executeRead(tx -> tx
                 .run("MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)<-[:WRITTEN_BY]-(p:Post) " +
-                        "RETURN p.id AS id " +
+                        "RETURN p.id AS id, null as userWhoLike " +
                         "UNION " +
                         "MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) " +
-                        "RETURN p.id AS id " +
+                        "RETURN p.id AS id, f.id as userWhoLike " +
                         "ORDER BY l.date, p.date DESC")
                 .list());
-        List<String> timeline = new ArrayList<>();
+        List<TimelineItemDTO> timeline = new ArrayList<>();
         foundNode.forEach(record -> {
             final var postId = record.get("id").asString();
-            timeline.add(postId);
+            final var userWhoLike = record.get("userWhoLike");
+            timeline.add(new TimelineItemDTO(postId, userWhoLike.asString()));
         });
         Timeline existingTimeline = Timeline.findByUserId(userId);
         if (existingTimeline != null) {

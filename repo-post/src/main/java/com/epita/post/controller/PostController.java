@@ -1,7 +1,7 @@
 package com.epita.post.controller;
 
-import com.epita.post.controller.dto.CreatePostDTO;
-import com.epita.post.controller.dto.PostDTO;
+import com.epita.tinyxlib.dto.CreatePostDTO;
+import com.epita.tinyxlib.dto.PostDTO;
 import com.epita.post.service.PostService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;

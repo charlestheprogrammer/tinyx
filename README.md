@@ -14,6 +14,15 @@
 
 ## Features
 
+### tinyx-lib
+Library that contains all declaration of DTO, entities, exceptions...
+
+To be used in other microservices, first install the library.
+```
+cd tinyx
+mvn clean install
+```
+
 ### repo-post
 - [X] User can create a post
 - [X] Post can contain text, a media, a repost. At least one of, at most two of

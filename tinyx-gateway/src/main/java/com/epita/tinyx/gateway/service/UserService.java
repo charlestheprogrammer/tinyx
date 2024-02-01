@@ -1,6 +1,6 @@
 package com.epita.tinyx.gateway.service;
 
-import com.epita.tinyx.gateway.entity.User;
+import com.epita.tinyxlib.entities.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.bson.types.ObjectId;
 

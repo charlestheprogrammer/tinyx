@@ -1,6 +1,6 @@
 package com.epita.social.repository;
 
-import com.epita.social.entity.Follow;
+import com.epita.tinyxlib.entities.Follow;
 import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.bson.types.ObjectId;

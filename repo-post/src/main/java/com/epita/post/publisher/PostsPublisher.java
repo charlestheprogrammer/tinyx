@@ -1,6 +1,6 @@
 package com.epita.post.publisher;
 
-import com.epita.post.controller.dto.PostDTO;
+import com.epita.tinyxlib.dto.PostDTO;
 import io.quarkus.redis.datasource.RedisDataSource;
 import io.quarkus.redis.datasource.pubsub.PubSubCommands;
 import jakarta.enterprise.context.ApplicationScoped;

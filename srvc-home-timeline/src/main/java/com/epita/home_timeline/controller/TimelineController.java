@@ -1,6 +1,6 @@
 package com.epita.home_timeline.controller;
 
-import com.epita.home_timeline.controller.dto.TimelineDTO;
+import com.epita.tinyxlib.dto.TimelineDTO;
 import com.epita.home_timeline.service.TimelineService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;

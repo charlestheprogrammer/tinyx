@@ -8,6 +8,11 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <dependencies>
+        <dependency>
+            <groupId>com.epita</groupId>
+            <artifactId>tinyxlib</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,5 +28,4 @@
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
     </properties>
-
 </project>

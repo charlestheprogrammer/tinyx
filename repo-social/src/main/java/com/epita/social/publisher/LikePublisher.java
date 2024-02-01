@@ -1,7 +1,7 @@
 package com.epita.social.publisher;
 
-import com.epita.social.controller.dto.LikeDTO;
-import com.epita.social.entity.Like;
+import com.epita.tinyxlib.dto.LikeDTO;
+import com.epita.tinyxlib.entities.Like;
 import io.quarkus.redis.datasource.RedisDataSource;
 import io.quarkus.redis.datasource.pubsub.PubSubCommands;
 import jakarta.enterprise.context.ApplicationScoped;

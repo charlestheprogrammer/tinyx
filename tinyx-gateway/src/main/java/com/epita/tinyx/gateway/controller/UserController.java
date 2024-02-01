@@ -1,7 +1,7 @@
 package com.epita.tinyx.gateway.controller;
 
-import com.epita.tinyx.gateway.controller.dto.UserDTO;
-import com.epita.tinyx.gateway.entity.User;
+import com.epita.tinyxlib.dto.UserDTO;
+import com.epita.tinyxlib.entities.User;
 import com.epita.tinyx.gateway.service.UserService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;

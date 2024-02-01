@@ -1,6 +1,6 @@
 package com.epita.social.service;
 
-import com.epita.social.entity.Like;
+import com.epita.tinyxlib.entities.Like;
 import com.epita.social.external.PostService;
 import com.epita.social.publisher.LikePublisher;
 import io.quarkus.security.ForbiddenException;
