@@ -10,9 +10,11 @@ import {
     blockUser,
     followUser,
     getFollowersByUserId,
-    getFollowsByUserId, getPostById,
+    getFollowsByUserId,
+    getPostById,
     getPostsByAuthor,
-    getUserInfosByUsername, getUserTimeline,
+    getUserInfosByUsername,
+    getUserTimeline,
     isUserBlocked,
     unblockUser,
     unfollowUser,
@@ -119,9 +121,8 @@ export default function User() {
 
     const onPostDeletion = (id) => {
         setPosts(posts.filter((post) => post.id !== id));
-        if (isAccountOwner)
-            setNbPost(nbPost - 1);
-    }
+        if (isAccountOwner) setNbPost(nbPost - 1);
+    };
 
     return (
         <div className="user">
@@ -146,7 +147,9 @@ export default function User() {
             </div>
             <div className="banner">
                 <img
-                    src={userInfos?.bannerUri ?? "https://picsum.photos/800/300"}
+                    src={
+                        userInfos?.bannerUri ?? "https://picsum.photos/800/300"
+                    }
                     alt=""
                 />
             </div>
@@ -196,6 +199,11 @@ export default function User() {
                             key={post.id}
                             id={post.id}
                             onDelete={onPostDeletion}
+                            likedBy={
+                                post.author !== userInfos.id
+                                    ? userInfos.id
+                                    : null
+                            }
                         />
                     ))}
             </div>

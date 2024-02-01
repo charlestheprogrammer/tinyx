@@ -4,24 +4,29 @@ import WritePost from "./WritePost";
 import "./styles/Feed.scss";
 import Post from "./Post";
 import axios from "axios";
-import {getAllPosts, getHomeTimeline, getPostById} from "../api.js";
-import {useSelector} from "react-redux";
-import {selectAccountId} from "../store/Account.js";
+import { getAllPosts, getHomeTimeline, getPostById } from "../api.js";
+import { useSelector } from "react-redux";
+import { selectAccountId } from "../store/Account.js";
 
 export default function Feed() {
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [posts, setPosts] = React.useState([]);
 
-    const accountId = useSelector(selectAccountId)
+    const accountId = useSelector(selectAccountId);
 
     React.useEffect(() => {
         if (!accountId) return;
         getHomeTimeline().then(async (res) => {
             if (!res.ok) return;
             const timelinePosts = [];
-            for (const postId of res.data.posts) {
-                const postRequest = await getPostById(postId);
+            for (const postInfos of res.data.posts) {
+                const postRequest = await getPostById(postInfos.postId);
                 if (!postRequest.ok) continue;
+                if (
+                    postInfos.userWhoLiked !== "null" &&
+                    postInfos.userWhoLiked !== accountId
+                )
+                    postRequest.data.likedBy = postInfos.userWhoLiked;
                 timelinePosts.push(postRequest.data);
             }
             setPosts(timelinePosts);
@@ -31,7 +36,7 @@ export default function Feed() {
 
     const onPostDeletion = (id) => {
         setPosts(posts.filter((post) => post.id !== id));
-    }
+    };
 
     return (
         <div className="feed">
@@ -60,6 +65,7 @@ export default function Feed() {
                     post={post.repost}
                     id={post.id}
                     onDelete={onPostDeletion}
+                    likedBy={post.likedBy}
                 />
             ))}
         </div>
