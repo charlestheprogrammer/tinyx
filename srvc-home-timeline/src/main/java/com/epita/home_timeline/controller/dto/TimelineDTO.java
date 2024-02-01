@@ -6,14 +6,14 @@ import com.epita.home_timeline.entity.Timeline;
 import java.util.List;
 
 public class TimelineDTO {
-    private List<String> posts;
+    private List<TimelineItemDTO> posts;
 
     private String userId;
 
     public TimelineDTO() {
     }
 
-    public TimelineDTO(List<String> posts, String userId) {
+    public TimelineDTO(List<TimelineItemDTO> posts, String userId) {
         this.posts = posts;
         this.userId = userId;
     }
@@ -23,11 +23,11 @@ public class TimelineDTO {
         this.userId = timeline.userId.toString();
     }
 
-    public List<String> getPosts() {
+    public List<TimelineItemDTO> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<String> posts) {
+    public void setPosts(List<TimelineItemDTO> posts) {
         this.posts = posts;
     }
 

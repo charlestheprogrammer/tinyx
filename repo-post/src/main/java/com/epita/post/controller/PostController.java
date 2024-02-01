@@ -30,6 +30,8 @@ public class PostController {
     public void createPost(@HeaderParam("X-user-id") String userId, CreatePostDTO postDTO) {
         if (userId == null || userId.isEmpty())
             throw new BadRequestException("X-user-id header is missing");
+        if (postDTO.getText().length() > 160)
+            throw new BadRequestException("Text is too long");
         PostDTO post = postDTO.toPostDTO();
         post.setAuthor(userId);
         postService.createPost(post.toEntity());
@@ -40,6 +42,8 @@ public class PostController {
     public void createReply(CreatePostDTO postDTO, @PathParam("postId") String postId, @HeaderParam("X-user-id") String userId) {
         if (userId == null || userId.isEmpty())
             throw new BadRequestException("X-user-id header is missing");
+        if (postDTO.getText().length() > 160)
+            throw new BadRequestException("Text is too long");
         PostDTO post = postDTO.toPostDTO();
         post.setAuthor(userId);
         post.replyTo = postId;

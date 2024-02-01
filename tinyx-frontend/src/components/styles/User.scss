@@ -49,6 +49,9 @@
     .banner {
         width: 100%;
         aspect-ratio: 3.5/1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         img {
             width: 100%;
