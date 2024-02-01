@@ -22,6 +22,7 @@ export default function Feed() {
             for (const postInfos of res.data.posts) {
                 const postRequest = await getPostById(postInfos.postId);
                 if (!postRequest.ok) continue;
+                postRequest.data.likedBy = postInfos.userWhoLiked;
                 timelinePosts.push(postRequest.data);
             }
             setPosts(timelinePosts);
@@ -60,6 +61,7 @@ export default function Feed() {
                     post={post.repost}
                     id={post.id}
                     onDelete={onPostDeletion}
+                    likedBy={post.likedBy}
                 />
             ))}
         </div>

@@ -196,6 +196,7 @@ export default function User() {
                             key={post.id}
                             id={post.id}
                             onDelete={onPostDeletion}
+                            likedBy={post.author !== userInfos.id ? userInfos.id : null}
                         />
                     ))}
             </div>
