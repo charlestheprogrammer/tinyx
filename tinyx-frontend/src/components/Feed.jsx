@@ -22,7 +22,8 @@ export default function Feed() {
             for (const postInfos of res.data.posts) {
                 const postRequest = await getPostById(postInfos.postId);
                 if (!postRequest.ok) continue;
-                postRequest.data.likedBy = postInfos.userWhoLiked;
+                if (postInfos.userWhoLiked !== "null" && postInfos.userWhoLiked !== accountId)
+                    postRequest.data.likedBy = postInfos.userWhoLiked;
                 timelinePosts.push(postRequest.data);
             }
             setPosts(timelinePosts);

@@ -166,7 +166,7 @@ export default function Post({ user, content, image, date, post, id, onDelete, l
                             {likes}
                         </div>
                         <div>
-                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 408.483 408.483" onClick={deleteOwnPost}>
                                 <g>
                                     <g>
