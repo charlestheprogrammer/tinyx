@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyx-gateway
+  namespace: tinyx
+  labels:
+    app: tinyx-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyx-gateway
+  template:
+    metadata:
+      labels:
+        app: tinyx-gateway
+    spec:
+      containers:
+        - name: tinyx-gateway
+          image: tinyx-gateway:latest
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 9000
+          volumeMounts:
+            - mountPath: /config/
+              name: application-properties
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_PORT
+
+            - name: TINYX_GATEWAY_MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_GATEWAY_MONGODB_USER
+
+            - name: TINYX_GATEWAY_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_GATEWAY_MONGODB_PASSWORD
+
+            - name: TINYX_GATEWAY_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-gateway-config
+                  key: TINYX_GATEWAY_MONGODB_DATABASE
+
+            - name: MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_HOST
+
+            - name: MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_PORT
+      volumes:
+        - name: application-properties
+          configMap:
+            name: tinyx-gateway-application-properties

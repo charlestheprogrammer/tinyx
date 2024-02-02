@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - service.yml
+
+configMapGenerator:
+  - name: tinyx-post-config
+    namespace: tinyx
+    literals:
+      - TINYX_POST_MONGODB_DATABASE=tinyx-post
+
+  - name: tinyx-post-application-properties
+    namespace: tinyx
+    files:
+      - application.properties

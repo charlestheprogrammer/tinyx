@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyx-post
+  namespace: tinyx
+  labels:
+    app: tinyx-post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyx-post
+  template:
+    metadata:
+      labels:
+        app: tinyx-post
+    spec:
+      containers:
+        - name: tinyx-post
+          image: tinyx-repo-post:latest
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 9001
+          volumeMounts:
+            - mountPath: /config/
+              name: application-properties
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_PORT
+
+            - name: TINYX_POST_MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_POST_MONGODB_USER
+
+            - name: TINYX_POST_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_POST_MONGODB_PASSWORD
+
+            - name: TINYX_POST_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-post-config
+                  key: TINYX_POST_MONGODB_DATABASE
+
+            - name: MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_HOST
+
+            - name: MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_PORT
+      volumes:
+        - name: application-properties
+          configMap:
+            name: tinyx-post-application-properties
