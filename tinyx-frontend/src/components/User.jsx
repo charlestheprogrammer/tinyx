@@ -63,8 +63,8 @@ export default function User() {
         getUserTimeline(userInfos.id).then(async (res) => {
             if (!res.ok) return;
             const timelinePosts = [];
-            for (const postId of res.data.posts) {
-                const postRequest = await getPostById(postId);
+            for (const postInfos of res.data.posts) {
+                const postRequest = await getPostById(postInfos.postId);
                 if (!postRequest.ok) continue;
                 timelinePosts.push(postRequest.data);
             }

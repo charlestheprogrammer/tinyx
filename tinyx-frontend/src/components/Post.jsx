@@ -113,7 +113,7 @@ export default function Post({
 
     return (
         <>
-            {likedBy && (
+            {likedBy && likedBy !== "null" && (
                 <p className="postTopInfo">
                     @{likedByUsername} liked this post
                 </p>

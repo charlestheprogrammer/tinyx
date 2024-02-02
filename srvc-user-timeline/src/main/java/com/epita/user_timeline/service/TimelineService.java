@@ -18,17 +18,19 @@ public class TimelineService {
     public void createTimeline(final ObjectId userId) {
         final var session = neo4jDriver.session();
         final var foundNode = session.executeRead(tx -> tx
-                .run("MATCH (p:Post)-[:WRITTEN_BY]->(u:User {id: \"" + userId + "\"}) " +
-                        "RETURN p.id AS id " +
-                        "UNION " +
-                        "MATCH (u:User {id: \"" + userId + "\"})-[l:LIKES]->(p:Post) " +
-                        "RETURN p.id AS id " +
-                        "ORDER BY l.date, p.date DESC")
+                .run("CALL {\n" +
+                        "    MATCH (p:Post)-[:WRITTEN_BY]->(u:User {id: \"" + userId + "\"}) RETURN p.id as id, p.date as date\n" +
+                        "    UNION\n" +
+                        "    MATCH (u:User {id: \"" + userId + "\"})-[l:LIKES]->(p:Post) RETURN p.id as id, l.date as date\n" +
+                        "}\n" +
+                        "RETURN id\n" +
+                        "ORDER BY date DESC"
+                )
                 .list());
         List<TimelineItemDTO> timeline = new ArrayList<>();
         foundNode.forEach(record -> {
             final var postId = record.get("id").asString();
-            timeline.add(new TimelineItemDTO(postId, userId.toString()));
+            timeline.add(new TimelineItemDTO(postId, null));
         });
         Timeline existingTimeline = Timeline.findByUserId(userId);
         if (existingTimeline != null) {
@@ -44,7 +46,10 @@ public class TimelineService {
 
     public Timeline getTimeline(String userId) {
         Timeline timeline = Timeline.findByUserId(new ObjectId(userId));
-        System.out.println("timeline: " + timeline);
+        if (timeline == null) {
+            createTimeline(new ObjectId(userId));
+            timeline = Timeline.findByUserId(new ObjectId(userId));
+        }
         return timeline;
     }
 }

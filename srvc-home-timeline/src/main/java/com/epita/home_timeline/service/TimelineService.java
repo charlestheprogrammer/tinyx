@@ -45,6 +45,11 @@ public class TimelineService {
     }
 
     public Timeline getTimeline(String userId) {
-        return Timeline.findByUserId(new ObjectId(userId));
+        Timeline existingTimeline = Timeline.findByUserId(new ObjectId(userId));
+        if (existingTimeline == null) {
+            createTimeline(new ObjectId(userId));
+            existingTimeline = Timeline.findByUserId(new ObjectId(userId));
+        }
+        return existingTimeline;
     }
 }

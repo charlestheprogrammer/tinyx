@@ -5,6 +5,7 @@ import com.epita.tinyxlib.entities.Timeline;
 import com.epita.user_timeline.service.TimelineService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.*;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
