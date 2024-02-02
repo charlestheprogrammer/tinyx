@@ -47,6 +47,7 @@ build_services:
   stage: build 🏗
   image: maven:latest
   script:
+    - mvn install
     - cd repo-post
     - mvn package
     - cd ../tinyx-gateway
