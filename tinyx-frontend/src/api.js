@@ -71,6 +71,14 @@ export const getUserTimeline = (userId) =>
 export const getHomeTimeline = () =>
     api.get(`/srvc-home-timeline/api/timeline`);
 
+export const searchInPosts = (query) => {
+    return api.post(`/srvc-search/api/posts/search`, query, {
+        headers: {
+            "Content-Type": "plain/text",
+        },
+    });
+};
+
 export default {
     api,
 };
