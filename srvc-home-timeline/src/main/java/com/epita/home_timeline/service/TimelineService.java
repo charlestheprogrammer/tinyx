@@ -18,17 +18,18 @@ public class TimelineService {
     public void createTimeline(final ObjectId userId) {
         final var session = neo4jDriver.session();
         final var foundNode = session.executeRead(tx -> tx
-                .run("MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)<-[:WRITTEN_BY]-(p:Post) " +
-                        "RETURN p.id AS id, null as userWhoLike " +
-                        "UNION " +
-                        "MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) " +
-                        "RETURN p.id AS id, f.id as userWhoLike " +
-                        "ORDER BY l.date, p.date DESC")
+                .run("CALL {\n" +
+                        "    MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)<-[:WRITTEN_BY]-(p:Post) RETURN p.id as id, p.date as date, null as userWhoLiked\n" +
+                        "    UNION ALL\n" +
+                        "    MATCH (u:User {id: \" " + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) RETURN p.id as id, l.date as date, f.id as userWhoLiked\n" +
+                        "}\n" +
+                        "RETURN id, userWhoLiked\n" +
+                        "ORDER BY date DESC")
                 .list());
         List<TimelineItemDTO> timeline = new ArrayList<>();
         foundNode.forEach(record -> {
             final var postId = record.get("id").asString();
-            final var userWhoLike = record.get("userWhoLike");
+            final var userWhoLike = record.get("userWhoLiked");
             timeline.add(new TimelineItemDTO(postId, userWhoLike.asString()));
         });
         Timeline existingTimeline = Timeline.findByUserId(userId);
