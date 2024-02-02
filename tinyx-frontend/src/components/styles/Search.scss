@@ -6,6 +6,7 @@
     position: sticky;
     top: 0;
     height: calc(100vh - 0.5rem);
+    overflow-y: auto;
 
     .search-input {
         background-color: #202327;
