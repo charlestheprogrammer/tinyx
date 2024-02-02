@@ -43,6 +43,27 @@ build_frontend:
       - tinyx-frontend/dist
     expire_in: 10 minutes
 
+build_services:
+  stage: build 🏗
+  image: maven:latest
+  script:
+    - cd repo-post
+    - mvn package
+    - cd ../tinyx-gateway
+    - mvn package
+  
+build_docker_images:
+  stage: build 🏗
+  image: docker:latest
+  script:
+    - cd repo-post
+    - docker build -t tinyx-repo-post:latest .
+    - docker push registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-post:latest
+
+    - cd ../tinyx-gateway
+    - docker build -t tinyx-gateway:latest .
+    - docker push registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-gateway:latest
+
 deploy_frontend_to_s3:
   environment:
     name: prod_frontend
