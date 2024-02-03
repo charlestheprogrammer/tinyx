@@ -45,16 +45,16 @@ build_frontend:
 
 build_services:
   stage: build 🏗
-  image: maven:latest
+  image: maven:3.9.6-eclipse-temurin-17
   script:
-    - mvn install
+    - mvn clean install
     - cd repo-post
     - mvn package
     - cd ../tinyx-gateway
     - mvn package
   
-build_docker_images:
-  stage: build 🏗
+deploy_docker_images:
+  stage: deploy 🚀
   image: docker:latest
   script:
     - cd repo-post
