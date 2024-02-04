@@ -60,19 +60,15 @@ build_services:
   
 deploy_docker_images:
   stage: deploy 🚀
-  image: docker:24.0.5
-  services:
-    - name: docker:24.0.5-dind
-      alias: docker
+  image:
+    - name: gcr.io/kaniko-project/executor:debug
+      entrypoint: ""
   script:
+    - mkdir -p /kaniko/.docker
+    - ./config.sh
+    - mv config.json /kaniko/.docker
     - cd repo-post
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.cri.epita.fr
-    - docker build -t registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-post:latest .
-    - docker push registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-post:latest
-
-    - cd ../tinyx-gateway
-    - docker build -t registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-gateway:latest .
-    - docker push registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-gateway:latest
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-post:latest"
 
 deploy_frontend_to_s3:
   environment:
