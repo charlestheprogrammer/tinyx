@@ -61,8 +61,8 @@ build_services:
 deploy_docker_images:
   stage: deploy 🚀
   image:
-    - name: gcr.io/kaniko-project/executor:debug
-      entrypoint: ""
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
     - mkdir -p /kaniko/.docker
     - ./config.sh
