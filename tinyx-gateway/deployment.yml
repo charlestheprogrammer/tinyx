@@ -17,8 +17,7 @@ spec:
     spec:
       containers:
         - name: tinyx-gateway
-          image: tinyx-gateway:latest
-          imagePullPolicy: Never
+          image: registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-gateway:latest
           ports:
             - name: http
               containerPort: 9000
@@ -67,6 +66,8 @@ spec:
                 configMapKeyRef:
                   name: mongodb-config
                   key: MONGODB_PORT
+      imagePullSecrets:
+        - name: tinyx-pull-secret
       volumes:
         - name: application-properties
           configMap:

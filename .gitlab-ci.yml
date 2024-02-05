@@ -58,7 +58,7 @@ build_services:
       - tinyx-gateway/target/quarkus-app
     expire_in: 10 minutes
   
-deploy_docker_images:
+deploy_repo_post:
   stage: deploy 🚀
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -66,9 +66,30 @@ deploy_docker_images:
   script:
     - mkdir -p /kaniko/.docker
     - ./config.sh
-    - mv config.json /kaniko/.docker
     - cd repo-post
-    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-post:latest"
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-repo-post:latest"
+    
+  only:
+    variables: 
+      - $CI_COMMIT_BRANCH == "main"
+    changes:
+      - repo-post/**/*
+
+deploy_tinyx_gateway:
+  stage: deploy 🚀
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - ./config.sh
+    - cd ../tinyx-gateway
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-gateway:latest"
+  only:
+    variables: 
+      - $CI_COMMIT_BRANCH == "main"
+    changes:
+      - tinyx-gateway/**/*
 
 deploy_frontend_to_s3:
   environment:
