@@ -21,7 +21,7 @@ public class TimelineService {
                 .run("CALL {\n" +
                         "    MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)<-[:WRITTEN_BY]-(p:Post) RETURN p.id as id, p.date as date, null as userWhoLiked\n" +
                         "    UNION ALL\n" +
-                        "    MATCH (u:User {id: \" " + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) RETURN p.id as id, l.date as date, f.id as userWhoLiked\n" +
+                        "    MATCH (u:User {id: \"" + userId + "\"})-[:FOLLOWS]->(f:User)-[l:LIKES]->(p:Post) RETURN p.id as id, l.date as date, f.id as userWhoLiked\n" +
                         "}\n" +
                         "RETURN id, userWhoLiked\n" +
                         "ORDER BY date DESC")
@@ -51,5 +51,17 @@ public class TimelineService {
             existingTimeline = Timeline.findByUserId(new ObjectId(userId));
         }
         return existingTimeline;
+    }
+
+    public void refreshAllTimelines() {
+        final var session = neo4jDriver.session();
+        final var foundNode = session.executeRead(tx -> tx
+                .run("MATCH (u:User) RETURN u.id as id")
+                .list());
+        foundNode.forEach(record -> {
+            final var userId = record.get("id").asString();
+            createTimeline(new ObjectId(userId));
+        });
+        session.close();
     }
 }
