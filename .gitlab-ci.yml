@@ -43,51 +43,138 @@ build_frontend:
       - tinyx-frontend/dist
     expire_in: 10 minutes
 
-build_services:
+.build_services_template: &build_services
   stage: build 🏗
   image: maven:3.9.6-eclipse-temurin-17
+  artifacts:
+    expire_in: 10 minutes
+
+build_service_post:
+  <<: *build_services
   script:
     - mvn clean install
     - cd repo-post
     - mvn package
-    - cd ../tinyx-gateway
-    - mvn package
   artifacts:
     paths:
       - repo-post/target/quarkus-app
-      - tinyx-gateway/target/quarkus-app
-    expire_in: 10 minutes
-  
-deploy_repo_post:
+
+build_service_social:
+  <<: *build_services
+  script:
+    - mvn clean install
+    - cd repo-social
+    - mvn package
+  artifacts:
+    paths:
+      - repo-social/target/quarkus-app
+
+build_service_home_timeline:
+  <<: *build_services
+  script:
+    - mvn clean install
+    - cd srvc-home-timeline
+    - mvn package
+  artifacts:
+    paths:
+      - srvc-home-timeline/target/quarkus-app
+
+build_service_user_timeline:
+  <<: *build_services
+  script:
+    - mvn clean install
+    - cd srvc-user-timeline
+    - mvn package
+  artifacts:
+    paths:
+      - srvc-user-timeline/target/quarkus-app
+
+build_service_search:
+  <<: *build_services
+  script:
+    - mvn clean install
+    - cd srvc-search
+    - mvn package
+  artifacts:
+    paths:
+      - srvc-search/target/quarkus-app
+
+.deploy_repo_template: &deploy_repo
   stage: deploy 🚀
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  script:
-    - mkdir -p /kaniko/.docker
-    - ./config.sh
-    - cd repo-post
-    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-repo-post:latest"
-    
   only:
     variables: 
-      - $CI_COMMIT_BRANCH == "main"
+      - $CI_COMMIT_BRANCH == "32-kube-other-services"
+    
+.before_script_docker: &setup_kaniko_script
+  - mkdir -p /kaniko/.docker
+  - ./config.sh
+
+deploy_repo_post:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
+  script:
+    - cd repo-post
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-repo-post:latest"
+  only:
     changes:
       - repo-post/**/*
 
-deploy_tinyx_gateway:
-  stage: deploy 🚀
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
+deploy_repo_social:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
   script:
-    - mkdir -p /kaniko/.docker
-    - ./config.sh
-    - cd ../tinyx-gateway
+    - cd repo-social
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-repo-social:latest"
+  only:
+    changes:
+      - repo-social/**/*
+
+deploy_home_timeline:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
+  script:
+    - cd srvc-home-timeline
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-home-timeline:latest"
+  only:
+    changes:
+      - srvc-home-timeline/**/*
+
+deploy_user_timeline:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
+  script:
+    - cd srvc-user-timeline
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-user-timeline:latest"
+  only:
+    changes:
+      - srvc-user-timeline/**/*
+
+deploy_search:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
+  script:
+    - cd srvc-search
+    - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-search:latest"
+  only:
+    changes:
+      - srvc-search/**/*
+
+deploy_tinyx_gateway:
+  <<: *deploy_repo
+  before_script:
+    - *setup_kaniko_script
+  script:
+    - cd tinyx-gateway
     - /kaniko/executor --context "$(pwd)" --dockerfile "$(pwd)/Dockerfile" --destination "${CI_REGISTRY_IMAGE}/tinyx-gateway:latest"
   only:
-    variables: 
-      - $CI_COMMIT_BRANCH == "main"
     changes:
       - tinyx-gateway/**/*
 
