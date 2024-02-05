@@ -99,6 +99,16 @@ build_service_search:
     paths:
       - srvc-search/target/quarkus-app
 
+build_tiny_gateway:
+  <<: *build_services
+  script:
+    - mvn clean install
+    - cd tinyx-gateway
+    - mvn package
+  artifacts:
+    paths:
+      - tinyx-gateway/target/quarkus-app
+
 .deploy_repo_template: &deploy_repo
   stage: deploy 🚀
   image:
