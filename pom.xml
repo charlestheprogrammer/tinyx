@@ -60,7 +60,7 @@
         <dependency>
             <groupId>io.quarkiverse.neo4j</groupId>
             <artifactId>quarkus-neo4j</artifactId>
-            <version>3.0.3</version>
+            <version>3.6.0</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
