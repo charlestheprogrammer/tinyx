@@ -1,5 +1,23 @@
 # TinyX
 
+## Kubernetes deployment
+Everything has been thought to be deployed easly on a Kubernetes cluster.
+Requirements :
+    - kubectl configured to access your cluster
+    - helm to install CRD in the cluster
+
+```
+# To create a secret to pull image from the repository
+kubectl create secret docker-registry tinyx-pull-secret  --docker-server=registry.cri.epita.fr/charles.simon-meunier/
+--docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+
+```
+
+```
+# to install everything necessary and deploy use this script
+./helm_installation.sh
+```
+
 
 
 ## Services
