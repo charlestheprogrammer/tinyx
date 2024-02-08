@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinyx-search
+  namespace: tinyx
+spec:
+  selector:
+    app: tinyx-search
+  ports:
+    - name: http
+      port: 9004
+      targetPort: 9004
+      protocol: TCP

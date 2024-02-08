@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - service.yml
+
+configMapGenerator:
+  - name: tinyx-social-config
+    namespace: tinyx
+    literals:
+      - TINYX_SOCIAL_MONGODB_DATABASE=tinyx-social
+
+  - name: tinyx-social-application-properties
+    namespace: tinyx
+    files:
+      - application.properties

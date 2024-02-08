@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyx-search
+  namespace: tinyx
+  labels:
+    app: tinyx-search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyx-search
+  template:
+    metadata:
+      labels:
+        app: tinyx-search
+    spec:
+      containers:
+        - name: tinyx-search
+          image: registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-search:latest
+          ports:
+            - name: http
+              containerPort: 9004
+          volumeMounts:
+            - mountPath: /config/
+              name: application-properties
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_PORT
+
+            - name: TINYX_SEARCH_MONGODB_USER
+              value: tinyx-search
+
+            - name: TINYX_SEARCH_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-search-mongodb-credentials
+                  key: password
+
+            - name: TINYX_SEARCH_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-search-config
+                  key: TINYX_SEARCH_MONGODB_DATABASE
+
+            - name: MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_HOST
+
+            - name: MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_PORT
+
+            - name: ELASTIC_SEARCH_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: elastic-search-config
+                  key: ELASTIC_SEARCH_HOST
+
+            - name: ELASTIC_SEARCH_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: elastic-search-config
+                  key: ELASTIC_SEARCH_PORT
+            
+            - name: ELASTIC_SEARCH_USER
+              value: elastic
+
+            - name: ELASTIC_SEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-es-elastic-user
+                  key: elastic
+            
+      imagePullSecrets:
+        - name: tinyx-pull-secret
+      volumes:
+        - name: application-properties
+          configMap:
+            name: tinyx-search-application-properties

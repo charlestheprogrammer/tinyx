@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - service.yml
+
+configMapGenerator:
+  - name: tinyx-user-timeline-config
+    namespace: tinyx
+    literals:
+      - TINYX_USER_TIMELINE_MONGODB_DATABASE=tinyx-user-timeline
+
+  - name: tinyx-user-timeline-application-properties
+    namespace: tinyx
+    files:
+      - application.properties

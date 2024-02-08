@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyx-social
+  namespace: tinyx
+  labels:
+    app: tinyx-social
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyx-social
+  template:
+    metadata:
+      labels:
+        app: tinyx-social
+    spec:
+      containers:
+        - name: tinyx-social
+          image: registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-repo-social:latest
+          ports:
+            - name: http
+              containerPort: 9002
+          volumeMounts:
+            - mountPath: /config/
+              name: application-properties
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_PORT
+
+            - name: TINYX_SOCIAL_MONGODB_USER
+              value: tinyx-social
+
+            - name: TINYX_SOCIAL_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-social-mongodb-credentials
+                  key: password
+                  
+            - name: TINYX_SOCIAL_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-social-config
+                  key: TINYX_SOCIAL_MONGODB_DATABASE
+
+            - name: MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_HOST
+
+            - name: MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_PORT
+      imagePullSecrets:
+        - name: tinyx-pull-secret
+      volumes:
+        - name: application-properties
+          configMap:
+            name: tinyx-social-application-properties

@@ -1,0 +1,67 @@
+apiVersion: mongodb.com/v1
+kind: MongoDB
+metadata:
+  name: mongodb
+  namespace: tinyx
+spec:
+  version: "4.2.2"
+  opsManager:
+    configMapRef:
+      name: mongodb-config
+            # Must match metadata.name in ConfigMap file
+  env:
+    - name: MONGO_INITDB_ROOT_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: mongodb-admin-credentials
+          key: MONGO_INITDB_ROOT_USERNAME
+
+    - name: MONGO_INITDB_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mongodb-admin-credentials
+          key: MONGO_INITDB_ROOT_PASSWORD
+
+    - name: TINYX_GATEWAY_MONGODB_USER
+      valueFrom:
+        secretKeyRef:
+          name: tinyx-mongodb-credentials
+          key: TINYX_GATEWAY_MONGODB_USER
+
+    - name: TINYX_GATEWAY_MONGODB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: tinyx-mongodb-credentials
+          key: TINYX_GATEWAY_MONGODB_PASSWORD
+
+    - name: TINYX_GATEWAY_MONGODB_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: tinyx-gateway-config
+          key: TINYX_GATEWAY_MONGODB_DATABASE
+
+    - name: TINYX_POST_MONGODB_USER
+      valueFrom:
+        secretKeyRef:
+          name: tinyx-mongodb-credentials
+          key: TINYX_POST_MONGODB_USER
+
+    - name: TINYX_POST_MONGODB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: tinyx-mongodb-credentials
+          key: TINYX_POST_MONGODB_PASSWORD
+
+    - name: TINYX_POST_MONGODB_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: tinyx-post-config
+          key: TINYX_POST_MONGODB_DATABASE
+  init:
+    script:
+      configMap:
+        name: mongodb-initdb
+  credentials: mongodb-admin-credentials
+  type: Standalone
+  persistent: true
+  

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyx-home-timeline
+  namespace: tinyx
+  labels:
+    app: tinyx-home-timeline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyx-home-timeline
+  template:
+    metadata:
+      labels:
+        app: tinyx-home-timeline
+    spec:
+      containers:
+        - name: tinyx-home-timeline
+          image: registry.cri.epita.fr/charles.simon-meunier/tinyx/tinyx-home-timeline:latest
+          ports:
+            - name: http
+              containerPort: 9003
+          volumeMounts:
+            - mountPath: /config/
+              name: application-properties
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_PORT
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_USER
+              value: tinyx-home-timeline
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-home-timeline-mongodb-credentials
+                  key: password
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-home-timeline-config
+                  key: TINYX_HOME_TIMELINE_MONGODB_DATABASE
+
+            - name: MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_HOST
+
+            - name: MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-config
+                  key: MONGODB_PORT
+
+            - name: NEO4J_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: neo4j-config
+                  key: NEO4J_HOST
+
+            - name: NEO4J_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: neo4j-config
+                  key: NEO4J_PORT
+
+            - name: NEO4J_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: neo4j-credentials
+                  key: NEO4J_AUTH
+
+            
+      imagePullSecrets:
+        - name: tinyx-pull-secret
+      volumes:
+        - name: application-properties
+          configMap:
+            name: tinyx-home-timeline-application-properties

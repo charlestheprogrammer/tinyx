@@ -1,0 +1,17 @@
+neo4j:
+  name: neo4j
+  namespace: tinyx
+  resources:
+    cpu: "0.5"
+    memory: "2Gi"
+
+  #dbms.security.auth_enabled: true
+  #passwordFromSecret: neo4j-credentials
+  password: tinyxtinyx
+  
+volumes:
+  data:
+    mode: defaultStorageClass
+    defaultStorageClass:
+      requests:
+        storage: 1Gi

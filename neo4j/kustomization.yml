@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - secrets.yml
+
+configMapGenerator:
+  - name: neo4j-config
+    namespace: tinyx
+    literals:
+      - NEO4J_PORT=7687
+      - NEO4J_HOST=neo4j.tinyx.svc.cluster.local

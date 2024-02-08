@@ -1,0 +1,93 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: mongodb
+spec:
+  members: 1
+  type: ReplicaSet
+  version: "6.0.5"
+  security:
+    authentication:
+      modes: ["SCRAM-SHA-1"]
+  users:
+    - name: tinyx
+      db: admin
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: mongodb-admin-credentials
+      roles:
+        - name: clusterAdmin
+          db: admin
+        - name: userAdminAnyDatabase
+          db: admin
+      scramCredentialsSecretName: my-scram
+
+    - name: tinyx-gateway
+      db: tinyx-gateway
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-gateway-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-gateway
+      scramCredentialsSecretName: scram-gateway
+    
+    - name: tinyx-post
+      db: tinyx-post
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-post-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-post
+      scramCredentialsSecretName: scram-post
+
+    - name: tinyx-social
+      db: tinyx-social
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-social-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-social
+      scramCredentialsSecretName: scram-social
+
+    - name: tinyx-home-timeline
+      db: tinyx-home-timeline
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-home-timeline-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-home-timeline
+      scramCredentialsSecretName: scram-home-timeline
+
+    - name: tinyx-user-timeline
+      db: tinyx-user-timeline
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-user-timeline-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-user-timeline
+      scramCredentialsSecretName: scram-user-timeline
+
+    - name: tinyx-search
+      db: tinyx-search
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: tinyx-search-mongodb-credentials
+      roles:
+        - name: readWrite
+          db: tinyx-search
+      scramCredentialsSecretName: scram-search
+
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+
+
+# the user credentials will be generated from this secret
+# once the credentials are generated, this secret is no longer required
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tinyx-mongo-password
+type: Opaque
+stringData:
+  password: tinyx
+

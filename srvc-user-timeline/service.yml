@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinyx-user-timeline
+  namespace: tinyx
+spec:
+  selector:
+    app: tinyx-user-timeline
+  ports:
+    - name: http
+      port: 9005
+      targetPort: 9005
+      protocol: TCP

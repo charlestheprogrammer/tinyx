@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yml
+  - service.yml
+
+configMapGenerator:
+  - name: tinyx-search-config
+    namespace: tinyx
+    literals:
+      - TINYX_SEARCH_MONGODB_DATABASE=tinyx-search
+
+  - name: tinyx-search-application-properties
+    namespace: tinyx
+    files:
+      - application.properties
