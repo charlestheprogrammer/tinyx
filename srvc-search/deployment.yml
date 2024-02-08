@@ -38,13 +38,25 @@ spec:
                   key: REDIS_PORT
 
             - name: TINYX_SEARCH_MONGODB_USER
+<<<<<<< HEAD
               value: tinyx-search
+=======
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SEARCH_MONGODB_USER
+>>>>>>> 49088c4 (Feat(#32): configs for each service)
 
             - name: TINYX_SEARCH_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
+<<<<<<< HEAD
                   name: tinyx-search-mongodb-credentials
                   key: password
+=======
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SEARCH_MONGODB_PASSWORD
+>>>>>>> 49088c4 (Feat(#32): configs for each service)
 
             - name: TINYX_SEARCH_MONGODB_DATABASE
               valueFrom:
@@ -63,6 +75,7 @@ spec:
                 configMapKeyRef:
                   name: mongodb-config
                   key: MONGODB_PORT
+<<<<<<< HEAD
 
             - name: ELASTIC_SEARCH_HOST
               valueFrom:
@@ -85,6 +98,8 @@ spec:
                   name: elasticsearch-es-elastic-user
                   key: elastic
             
+=======
+>>>>>>> 49088c4 (Feat(#32): configs for each service)
       imagePullSecrets:
         - name: tinyx-pull-secret
       volumes:

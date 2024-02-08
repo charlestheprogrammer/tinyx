@@ -71,6 +71,60 @@ spec:
                   name: tinyx-post-config
                   key: TINYX_POST_MONGODB_DATABASE
 
+            - name: TINYX_SEARCH_MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SEARCH_MONGODB_USER
+
+            - name: TINYX_SEARCH_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SEARCH_MONGODB_PASSWORD
+
+            - name: TINYX_SEARCH_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-post-config
+                  key: TINYX_SEARCH_MONGODB_DATABASE
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_HOME_TIMELINE_MONGODB_USER
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_HOME_TIMELINE_MONGODB_PASSWORD
+
+            - name: TINYX_HOME_TIMELINE_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-post-config
+                  key: TINYX_HOME_TIMELINE_MONGODB_DATABASE
+
+            - name: TINYX_USER_TIMELINE_MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_USER_TIMELINE_MONGODB_USER
+
+            - name: TINYX_USER_TIMELINE_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_USER_TIMELINE_MONGODB_PASSWORD
+
+            - name: TINYX_USER_TIMELINE_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tinyx-post-config
+                  key: TINYX_USER_TIMELINE_MONGODB_DATABASE
+
           volumeMounts:
             - mountPath: /data/db
               name: mongodb-data

@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: repo-post-ingress
+  namespace: tinyx
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /repo-post
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyx-post
+                port:
+                  number: 9001
+          - path: /repo-social
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyx-social
+                port:
+                  number: 9002
+          - path: /srvc-home-timeline
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyx-home-timeline
+                port:
+                  number: 9003
+          - path: /srvc-search
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyx-search
+                port:
+                  number: 9004
+          - path: /srvc-user-timeline
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyx-user-timeline
+                port:
+                  number: 9005

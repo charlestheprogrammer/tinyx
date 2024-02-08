@@ -6,3 +6,5 @@ resources:
   - repo-post
   - tinyx-gateway
   - namespace.yml
+  - secrets.yml
+  - ingress.yml

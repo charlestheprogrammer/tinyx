@@ -38,14 +38,27 @@ spec:
                   key: REDIS_PORT
 
             - name: TINYX_SOCIAL_MONGODB_USER
+<<<<<<< HEAD
               value: tinyx-social
+=======
+              valueFrom:
+                secretKeyRef:
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SOCIAL_MONGODB_USER
+>>>>>>> 49088c4 (Feat(#32): configs for each service)
 
             - name: TINYX_SOCIAL_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
+<<<<<<< HEAD
                   name: tinyx-social-mongodb-credentials
                   key: password
                   
+=======
+                  name: tinyx-mongodb-credentials
+                  key: TINYX_SOCIAL_MONGODB_PASSWORD
+
+>>>>>>> 49088c4 (Feat(#32): configs for each service)
             - name: TINYX_SOCIAL_MONGODB_DATABASE
               valueFrom:
                 configMapKeyRef:
