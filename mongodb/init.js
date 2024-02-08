@@ -25,21 +25,19 @@ db.createUser(
         ]
     }
 );
-
-db = db.getSiblingDB(process.env.TINYX_SEARCH_MONGODB_DATABASE);
+db = db.getSiblingDB(process.env.TINYX_SOCIAL_MONGODB_DATABASE);
 db.createUser(
     {
-        user: process.env.TINYX_SEARCH_MONGODB_USER,
-        pwd: process.env.TINYX_SEARCH_MONGODB_PASSWORD,
+        user: process.env.TINYX_SOCIAL_MONGODB_USER,
+        pwd: process.env.TINYX_SOCIAL_MONGODB_PASSWORD,
         roles: [
             {
                 role: "readWrite",
-                db: process.env.TINYX_SEARCH_MONGODB_DATABASE
+                db: process.env.TINYX_SOCIAL_MONGODB_DATABASE
             }
         ]
     }
 );
-
 db = db.getSiblingDB(process.env.TINYX_USER_TIMELINE_MONGODB_DATABASE);
 db.createUser(
     {
@@ -53,7 +51,6 @@ db.createUser(
         ]
     }
 );
-
 db = db.getSiblingDB(process.env.TINYX_HOME_TIMELINE_MONGODB_DATABASE);
 db.createUser(
     {
@@ -63,6 +60,19 @@ db.createUser(
             {
                 role: "readWrite",
                 db: process.env.TINYX_HOME_TIMELINE_MONGODB_DATABASE
+            }
+        ]
+    }
+);
+db = db.getSiblingDB(process.env.TINYX_SEARCH_MONGODB_DATABASE);
+db.createUser(
+    {
+        user: process.env.TINYX_SEARCH_MONGODB_USER,
+        pwd: process.env.TINYX_SEARCH_MONGODB_PASSWORD,
+        roles: [
+            {
+                role: "readWrite",
+                db: process.env.TINYX_SEARCH_MONGODB_DATABASE
             }
         ]
     }

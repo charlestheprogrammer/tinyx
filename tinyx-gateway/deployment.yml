@@ -38,16 +38,13 @@ spec:
                   key: REDIS_PORT
 
             - name: TINYX_GATEWAY_MONGODB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: tinyx-mongodb-credentials
-                  key: TINYX_GATEWAY_MONGODB_USER
+              value: tinyx-gateway
 
             - name: TINYX_GATEWAY_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: tinyx-mongodb-credentials
-                  key: TINYX_GATEWAY_MONGODB_PASSWORD
+                  name: tinyx-gateway-mongodb-credentials
+                  key: password
 
             - name: TINYX_GATEWAY_MONGODB_DATABASE
               valueFrom:
@@ -66,6 +63,7 @@ spec:
                 configMapKeyRef:
                   name: mongodb-config
                   key: MONGODB_PORT
+
       imagePullSecrets:
         - name: tinyx-pull-secret
       volumes:

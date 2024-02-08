@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: post
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  namespace: tinyx
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /repo-post(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tinyx-post
+                port:
+                  number: 9001

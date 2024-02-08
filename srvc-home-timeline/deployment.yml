@@ -38,25 +38,13 @@ spec:
                   key: REDIS_PORT
 
             - name: TINYX_HOME_TIMELINE_MONGODB_USER
-<<<<<<< HEAD
               value: tinyx-home-timeline
-=======
-              valueFrom:
-                secretKeyRef:
-                  name: tinyx-mongodb-credentials
-                  key: TINYX_HOME_TIMELINE_MONGODB_USER
->>>>>>> 49088c4 (Feat(#32): configs for each service)
 
             - name: TINYX_HOME_TIMELINE_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-<<<<<<< HEAD
                   name: tinyx-home-timeline-mongodb-credentials
                   key: password
-=======
-                  name: tinyx-mongodb-credentials
-                  key: TINYX_HOME_TIMELINE_MONGODB_PASSWORD
->>>>>>> 49088c4 (Feat(#32): configs for each service)
 
             - name: TINYX_HOME_TIMELINE_MONGODB_DATABASE
               valueFrom:
@@ -75,7 +63,6 @@ spec:
                 configMapKeyRef:
                   name: mongodb-config
                   key: MONGODB_PORT
-<<<<<<< HEAD
 
             - name: NEO4J_HOST
               valueFrom:
@@ -96,8 +83,6 @@ spec:
                   key: NEO4J_AUTH
 
             
-=======
->>>>>>> 49088c4 (Feat(#32): configs for each service)
       imagePullSecrets:
         - name: tinyx-pull-secret
       volumes:

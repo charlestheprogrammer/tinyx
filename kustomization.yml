@@ -3,8 +3,13 @@ kind: Kustomization
 resources:
   - redis
   - mongodb
+  - elastic-search
+  - neo4j
   - repo-post
+  - repo-social
+  - srvc-home-timeline
+  - srvc-user-timeline
+  - srvc-search
   - tinyx-gateway
   - namespace.yml
   - secrets.yml
-  - ingress.yml

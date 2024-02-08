@@ -2,16 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - statefulset.yml
-  - service.yml
   - secrets.yml
+  - mongodb.yml
 
 configMapGenerator:
   - name: mongodb-config
     namespace: tinyx
     literals:
       - MONGODB_PORT=27017
-      - MONGODB_HOST=mongodb.tinyx.svc.cluster.local
+      - MONGODB_HOST=mongodb-svc.tinyx.svc.cluster.local
 
   - name: mongodb-initdb
     namespace: tinyx
