@@ -22,9 +22,10 @@ public class GatewayFilter implements ContainerRequestFilter {
         System.out.println("Redirecting to " + portToRedirect(reqContext));
         try {
             String port = portToRedirect(reqContext);
+            String host = hostToRedirect(reqContext);
             String newPath = reqContext.getUriInfo().getPath().replaceFirst("/" + reqContext.getUriInfo().getPath().split("/")[1], "");
-            System.out.println("Redirecting to " + newPath);
-            reqContext.abortWith(Response.temporaryRedirect(new URI("http://localhost:" + port + newPath)).build());
+            System.out.println("Redirecting to " + host + ":" + port + newPath);
+            reqContext.abortWith(Response.temporaryRedirect(new URI("http://" + host + ":" + port + newPath)).build());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -33,6 +34,12 @@ public class GatewayFilter implements ContainerRequestFilter {
     private boolean shouldRedirect(ContainerRequestContext reqContext) {
         System.out.println(reqContext.getUriInfo().getPath());
         return reqContext.getUriInfo().getPath().startsWith("/repo-") || reqContext.getUriInfo().getPath().startsWith("/srvc-");
+    }
+
+    private String hostToRedirect(ContainerRequestContext reqContext) {
+        String microservice = reqContext.getUriInfo().getPath().split("/")[1].split("-")[1];
+        
+        return "tinyx-" + microservice + ".tinyx.svc.cluster.local";
     }
 
     private String portToRedirect(ContainerRequestContext reqContext) {
