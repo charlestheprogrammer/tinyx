@@ -1,5 +1,22 @@
 # TinyX
 
+## Architecture
+The project is divided into 5 microservices, each one having its own database. The communication between the microservices is done through REST API. The microservices are :
+- repo-post
+- repo-social
+- srvc-home-timeline
+- srvc-search
+- srvc-user-timeline
+
+There is also a library called tinyx-lib that contains all the DTO, entities, exceptions... that are used in the microservices.
+
+To finish, there is a gateway that is used to access the microservices. It is the only entry point to the microservices.
+
+[![Architecture](architecture.png)](architecture.png)
+
+The Neo4j database is used to store the social relations between the users. Here is the schema of the database :
+[![Neo4j](neo4j.png)](neo4j.png)
+
 ## Kubernetes deployment
 Everything has been thought to be deployed easly on a Kubernetes cluster.
 Requirements :
@@ -67,15 +84,15 @@ post’s post date instead)
 - [X] Can query the list of users who blocked a user
 
 ### srvc-search
-- [ ] Created posts are indexed
-- [ ] Deleted posts are removed from the index
-- [ ] If regular words are in the search terms, results must contain AT LEAST ONE of the
+- [X] Created posts are indexed
+- [X] Deleted posts are removed from the index
+- [X] If regular words are in the search terms, results must contain AT LEAST ONE of the
 searched words (vague search).
-- [ ] If hashtags are in the search terms, results must include ALL of the searched hashtags (strict
+- [X] If hashtags are in the search terms, results must include ALL of the searched hashtags (strict
 search)
-- [ ] If both words and hashtags are in the search terms, results must fulfill BOTH rules above
+- [X] If both words and hashtags are in the search terms, results must fulfill BOTH rules above
 at once
-- [ ] A hashtag word should not be matched as a regular word, only as a hashtag (e.g. searching
+- [X] A hashtag word should not be matched as a regular word, only as a hashtag (e.g. searching
 “word” should not find “#word”)
 
 ### srvc-user-timeline
@@ -92,7 +109,7 @@ said user
 - [X] Get a list of posts related to a specific user’s follows, containing
 - [X] posts authored by users followed by the user (bonus: second-degree follows ?)
 - [X] posts liked by users followed by the user (bonus: second-degree follows ?)
-- [ ] Timeline must contain the information of which user liked the post as we cannot
+- [X] Timeline must contain the information of which user liked the post as we cannot
 just rely on the timeline owner’s ID this time
 - [X] Sorted in chronological order (in case of likes, the date of like is used, not the date of
 post post)
